@@ -1,26 +1,33 @@
+#ifndef BLOCK_HPP
+#define BLOCK_HPP
+
 namespace Bastet{
 
-  enum BlockType{OBlock=0,IBlock,JBlock,LBlock,ZBlock,SBlock,TBlock};
-
   typedef unsigned char Color;
+  typedef short Orientation;
 
   class Dot{
   public:
     int x;
     int y;
+    Dot(int x,int y):x(x),y(y){};
   };
 
   class Block{
   private:
-    BlockType _type;
-    Color _color;
   public:
-    Block(const BlockType &type, const Color &color);
+    Block();
     virtual ~Block();
     /**
      * returns an array of 4 (x,y) pair for the occupied dots
+     * To be freed by the recipient TODO: smart pointers
      */
-    virtual Dot[4] GetDots(Dot position, size_t orientation) const;
+    virtual Dot* GetDots(Dot position, Orientation orientation) const;
     virtual Color GetColor() const;
+    virtual Orientation NextOrientation() const;
+    virtual Orientation PreviousOrientation() const;
+    virtual Orientation InitialOrientation() const;
   };
 }
+
+#endif //BLOCK_HPP

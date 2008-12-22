@@ -1,4 +1,8 @@
+#ifndef WELL_HPP
+#define WELL_HPP
+
 #include "Block.hpp" //for Color
+#include <cstddef> //size_t
 
 namespace Bastet{
 
@@ -10,10 +14,12 @@ namespace Bastet{
     Well(size_t width, size_t height);
     ~Well();
     void clear();
-    void operator()(size_t int x, size_t y);
+    void operator()(int x, int y);
     void operator()(Dot p);
     size_t get_width();
     size_t get_height();
   };
 
 }
+
+#endif //WELL_HPP

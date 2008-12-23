@@ -50,26 +50,26 @@ namespace Bastet{
  
   int BorderedWindow::GetMinX(){
     int y,x;
-    getyx(_border,y,x);
+    getbegyx(_border,y,x);
     return x;
   }
 
   int BorderedWindow::GetMinY(){
     int y,x;
-    getyx(_border,y,x);
+    getbegyx(_border,y,x);
     return y;
   }
 
   int BorderedWindow::GetMaxX(){
     int y,x;
     getmaxyx(_border,y,x);
-    return x;
+    return GetMinX()+x;
   }
 
   int BorderedWindow::GetMaxY(){
     int y,x;
     getmaxyx(_border,y,x);
-    return y;
+    return GetMinY()+y;
   }
 
   Curses::Curses(){
@@ -96,14 +96,13 @@ namespace Bastet{
     cbreak();
     
     start_color();
-    /* 1 - 16 is for blocks (we just don't have 16 blocks yet) */
+    /* 1 - 16 is for blocks */
     init_pair(1, COLOR_BLACK, COLOR_RED);
     init_pair(2, COLOR_BLACK, COLOR_YELLOW);
     init_pair(3, COLOR_BLACK, COLOR_GREEN);
     init_pair(4, COLOR_BLACK, COLOR_CYAN);
     init_pair(5, COLOR_BLACK, COLOR_MAGENTA);
     init_pair(6, COLOR_BLACK, COLOR_BLUE);
-    init_pair(7, COLOR_BLACK, COLOR_WHITE);
     
     /* 17 - ? is for other things */
     init_pair(17, COLOR_RED, COLOR_BLACK); //points
@@ -118,8 +117,8 @@ namespace Bastet{
 
   Ui::Ui(int argc, char **argv):_width(10),_height(20),
 				_wellWin(_height,2*_width),
-				_nextWin(3,2*4,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
-				_scoreWin(6,2*4,_nextWin.GetMaxY()+1,_nextWin.GetMinX())
+				_nextWin(5,15,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
+				_scoreWin(7,15,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
   }
 
@@ -156,10 +155,11 @@ namespace Bastet{
   int Ui::ChooseLevel(){
     int level=0;
     int ch='0';
-    format fmt("             Bastet\n"
+    format fmt("    Bastet\n"
 	       "\n"
 	       "Starting level = %1% \n"
-	       "0-9 to change, <SPACE> to start");
+	       "0-9 to change\n"
+	       "<SPACE> to start\n");
     string msg;
     while(ch!=' '){
       msg=str(fmt % level);
@@ -178,6 +178,36 @@ namespace Bastet{
     _wellWin.RedrawBorder();
     _nextWin.RedrawBorder();
     _scoreWin.RedrawBorder();
-  }
-}
 
+    wattrset((WINDOW*)_nextWin,COLOR_PAIR(17));
+    mvwprintw(_nextWin,0,0,"Next block:");
+    wrefresh(_nextWin);
+
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(17));
+    mvwprintw(_scoreWin,1,0,"Score:");
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(18));
+    mvwprintw(_scoreWin,3,0,"Lines:");
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(19));
+    mvwprintw(_scoreWin,5,0,"Level:");
+    wrefresh(_scoreWin);
+
+  }
+
+  int Ui::Play(int level){
+    int points=0;
+    int lines=0;
+#if 0
+    try{
+      while(1){
+	FallingBlock b=Well.Insert();
+	
+	
+	
+      }    
+    } catch(GameOver &go){
+
+    }
+#endif
+  }
+
+}

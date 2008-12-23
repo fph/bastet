@@ -13,11 +13,11 @@ namespace Bastet{
   public:
     Well(size_t width, size_t height);
     ~Well();
-    void clear();
+    void Clear();
     void operator()(int x, int y);
     void operator()(Dot p);
-    size_t get_width();
-    size_t get_height();
+    size_t GetWidth();
+    size_t GetHeight();
   };
 
 }

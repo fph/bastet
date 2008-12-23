@@ -1,4 +1,4 @@
-SOURCES=Ui.cpp main.cpp
+SOURCES=Ui.cpp main.cpp Block.cpp
 PROGNAME=bastet
 LDFLAGS+=-lncurses
 CXXFLAGS+=-ggdb -Wall

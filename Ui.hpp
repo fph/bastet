@@ -21,6 +21,7 @@ namespace Bastet{
     int GetMinY();
     int GetMaxX();
     int GetMaxY();
+    void DrawDot(const Dot &d, Color c);
   };
 
   class Curses{
@@ -34,7 +35,11 @@ namespace Bastet{
     void MessageDialog(const std::string &message);
     void InputDialog(const std::string &message, const std::string &defaultin);
     void RedrawStatic(); //redraws the "static" parts of the screen
-    void Redraw(Well *well, FallingBlock *fb, Block *next);
+    void RedrawWell(const Well &well, const FallingBlock &fb);
+    void RedrawNext(const Block &next);
+    void RedrawScore(int score, int lines, int level);
+    int DropBlock(Well &w, const Block &b, int level);
+    
     int ChooseLevel();
     int Play(int level); ///returns points
     bool ShowScores(); ///returns true if wants to play again

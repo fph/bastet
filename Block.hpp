@@ -8,6 +8,10 @@ namespace Bastet{
 
   typedef int Color; //to be given to wattrset
   typedef short Orientation;
+  struct Dot;
+
+  typedef boost::array<Dot,4> DotMatrix; //the four dots occupied by a tetromino
+  typedef boost::array<DotMatrix,4> OrientationMatrix; //the four orientations of a tetromino
 
   struct Dot{
     int x;
@@ -19,48 +23,37 @@ namespace Bastet{
       x+=d.x;y+=d.y;
       return *this;
     }
+    DotMatrix operator +(const DotMatrix &b) const{
+      return (DotMatrix){{*this+b[0],*this+b[1],*this+b[2],*this+b[3]}};
+    }
   };
 
-  namespace BlockType{
-    enum BlockType{O,I,S,Z,T,L,J};
-  }
-
-  boost::array<Dot,4> operator +(const Dot &a,const boost::array<Dot,4> &b){
-    return (boost::array<Dot,4>){{a+b[0],a+b[1],a+b[2],a+b[3]}};
-  }
-
-  template <BlockType::BlockType T> class Block{
+  class Block{
   private:
-    static const boost::array<boost::array<Dot,4>,4> _dotMatrix;
+    const OrientationMatrix _matrix;
+    const Color _color;
   public:
-    Block(){};
-    virtual ~Block(){};
+    Block(Color c, const OrientationMatrix &m):_matrix(m),_color(c){};
+    ~Block(){};
     /**
      * returns an array of 4 (x,y) pair for the occupied dots
      */
-    const boost::array<Dot,4>& GetDots(Dot position, Orientation orientation) const
-    {return _dotMatrix[orientation%4];}
-    Color GetColor() const;
+    DotMatrix GetDots(Dot position, Orientation orientation) const
+    {return position+_matrix[orientation];}
+    Color GetColor() const {return _color;};
     Orientation NextOrientation(Orientation &o) const
-    {return o+1 % 4;}
+    {return (o+1) % 4;}
     //{return (o+1==HowManyOrientations())?0:(o+1);}
     Orientation PreviousOrientation(Orientation &o) const
-    {return o-1 % 4;}
+    {return (o+3) % 4;}
     //{return (o==0)?HowManyOrientations()-1:(o-1);}
-    Orientation HowManyOrientations() const
+    static Orientation HowManyOrientations()
     {return 4;}
-    Orientation InitialOrientation() const
+    static Orientation InitialOrientation()
     {return 0;}
   };
 
-  template<> Color Block<BlockType::I>::GetColor() const {return COLOR_PAIR(4);}
-  template<> Color Block<BlockType::J>::GetColor() const {return COLOR_PAIR(6);}
-  template<> Color Block<BlockType::L>::GetColor() const {return COLOR_PAIR(2);}
-  template<> Color Block<BlockType::O>::GetColor() const {return COLOR_PAIR(2)|A_BOLD;}
-  template<> Color Block<BlockType::S>::GetColor() const {return COLOR_PAIR(3);}
-  template<> Color Block<BlockType::T>::GetColor() const {return COLOR_PAIR(5);}
-  template<> Color Block<BlockType::Z>::GetColor() const {return COLOR_PAIR(1);}
- 
+  extern boost::array<Block,7> blocks;
 }
 
 #endif //BLOCK_HPP

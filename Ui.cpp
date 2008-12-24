@@ -1,8 +1,10 @@
 #include "Ui.hpp"
+#include "FallingBlock.hpp"
 
 #include <cstdio>
 #include <cstdlib>
 #include <boost/format.hpp>
+#include <boost/foreach.hpp>
 
 using namespace std;
 using namespace boost;
@@ -72,6 +74,12 @@ namespace Bastet{
     return GetMinY()+y;
   }
 
+  void BorderedWindow::DrawDot(const Dot &d, Color c){
+    wattrset((WINDOW *)(*this),c);
+    mvwaddch(*this,d.y,2*d.x,' ');
+    mvwaddch(*this,d.y,2*d.x+1,' ');
+  }
+
   Curses::Curses(){
     if(initscr()==NULL){
       fprintf(stderr,"bastet: error while initializing graphics (ncurses library).\n");
@@ -103,6 +111,8 @@ namespace Bastet{
     init_pair(4, COLOR_BLACK, COLOR_CYAN);
     init_pair(5, COLOR_BLACK, COLOR_MAGENTA);
     init_pair(6, COLOR_BLACK, COLOR_BLUE);
+    init_pair(7, COLOR_BLACK, COLOR_WHITE);
+    
     
     /* 17 - ? is for other things */
     init_pair(17, COLOR_RED, COLOR_BLACK); //points
@@ -137,7 +147,7 @@ namespace Bastet{
       start=next+1;
       height++;
     }
-    return Dot(width,height);
+    return (Dot){width,height};
   }
 
   void Ui::MessageDialog(const std::string &message){
@@ -193,21 +203,105 @@ namespace Bastet{
 
   }
 
+  //must be <1E+06, because it should fit into a timeval usec field(see man select)
+  static const boost::array<int,10> delay = {{999999, 770000, 593000, 457000, 352000, 271000, 208000, 160000, 124000, 95000}};
+
+  int Ui::DropBlock(Well &w, const Block &b, int level){
+    fd_set in, tmp_in;
+    struct timeval time;
+    int blockscore=0; //scoring as per tetris guidelines, 1 for each soft-drop, 2 for each hard drop
+
+    FD_ZERO(&in);
+    FD_SET(0,&in); //adds stdin
+    
+    time.tv_sec=0;
+    time.tv_usec=delay[level];
+    
+    //assumes nodelay(stdscr,TRUE) has already been called
+    FallingBlock fb(b,w);    
+
+    RedrawWell(w,fb);
+
+    while(1){ //break = tetromino locked
+      tmp_in=in;
+      int sel_ret=select(FD_SETSIZE,&tmp_in, NULL, NULL, &time);
+      if(sel_ret==0){ //timeout
+	if(!fb.MoveDown(w))
+	  break;
+	time.tv_sec=0;
+	time.tv_usec=delay[level];
+      }
+      else{ //keypress
+	int ch=getch();
+	if(ch==KEY_LEFT)
+	  fb.MoveLeft(w);
+	else if(ch==KEY_RIGHT)
+	  fb.MoveRight(w);
+	else if(ch==KEY_DOWN){
+	  bool val=fb.MoveDown(w);
+	  if(val){
+	    blockscore++;
+	    time.tv_sec=0;
+	    time.tv_usec=delay[level];
+	  }
+	  else break;
+	}
+	else if(ch==' ')
+	  fb.RotateCW(w);
+	else if(ch==KEY_BACKSPACE)
+	  fb.RotateCCW(w);
+	else if(ch==KEY_UP){
+	  blockscore+=2*fb.HardDrop(w);
+	  break;
+	}
+	else if(ch=='p'){
+	  //TODO: stub, pause
+	}
+	else {} //default...
+
+      } //keypress switch
+      RedrawWell(w,fb);
+    } //while(1) vvv piece locked
+    w.Lock(fb);
+  }
+
+  void Ui::RedrawWell(const Well &w, const FallingBlock &fb){
+    for(size_t i=0;i<_width;++i)
+      for(size_t j=0;j<_height;++j)
+	_wellWin.DrawDot((Dot){i,j},w(i,j));
+    
+    BOOST_FOREACH(const Dot &d, fb.GetMatrix())
+      _wellWin.DrawDot(d,fb.GetColor());
+
+    wrefresh(_wellWin);
+  }
+
+  void Ui::RedrawNext(const Block &next){
+    //TODO: STUB
+    return;
+  }
+
+  void Ui::RedrawScore(int score, int lines, int level){
+    //TODO: STUB
+    return;
+  }
+
   int Ui::Play(int level){
+    RedrawStatic();
     int points=0;
     int lines=0;
-#if 0
+    Well w(_width,_height);
+    Block *next=&blocks[random()%7];
+    nodelay(stdscr,TRUE);
     try{
-      while(1){
-	FallingBlock b=Well.Insert();
-	
-	
-	
-      }    
+      while(true){
+	DropBlock(w,*next,0);
+	next=&blocks[random()%7];
+      }
     } catch(GameOver &go){
 
     }
-#endif
+    return points;
   }
 
 }

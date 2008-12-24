@@ -1,4 +1,5 @@
 #include "FallingBlock.hpp"
+#include <boost/foreach.hpp>
 
 namespace Bastet{
   FallingBlock::FallingBlock(const Block &block, const Well &w, const Dot &pos, Orientation orientation):
@@ -66,5 +67,12 @@ namespace Bastet{
 
   Color FallingBlock::GetColor() const{
     return _block.GetColor();
+  }
+
+  bool FallingBlock::IsOutOfScreen() const{
+    BOOST_FOREACH(const Dot &d, GetMatrix()){
+      if(d.y>=0) return false;
+    }
+    return true;
   }
 }

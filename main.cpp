@@ -4,6 +4,6 @@ using namespace Bastet;
 
 int main(int argc, char **argv){
   Ui ui(argc,argv);
-  int level=ui.ChooseLevel();
-  int score=ui.Play(level);
+  ui.ChooseLevel();
+  ui.Play();
 }

@@ -19,6 +19,7 @@ namespace Bastet{
     FallingBlock(const Block &block, const Well &w, const Dot &pos=(Dot){3,-2}, Orientation orientation=Block::InitialOrientation());
     ~FallingBlock();
     Color GetColor() const;
+    bool IsOutOfScreen() const; //to check for game over
   private:
     const Block &_block;
     Dot _pos; //position

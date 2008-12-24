@@ -11,6 +11,12 @@ using namespace boost;
 
 namespace Bastet{
 
+  Score &operator +=(Score &a, const Score &b){
+    a.first+=b.first;
+    a.second+=b.second;
+    return a;
+  }
+
   void voidendwin(){
     endwin();
   }
@@ -115,11 +121,12 @@ namespace Bastet{
     
     
     /* 17 - ? is for other things */
-    init_pair(17, COLOR_RED, COLOR_BLACK); //points
+    init_pair(17, COLOR_RED,    COLOR_BLACK); //points
     init_pair(18, COLOR_YELLOW, COLOR_BLACK); //number of lines
-    init_pair(19, COLOR_GREEN, COLOR_BLACK); //level
+    init_pair(19, COLOR_GREEN,  COLOR_BLACK); //level
     init_pair(20, COLOR_YELLOW, COLOR_BLACK); //messages
-    init_pair(21, COLOR_WHITE, COLOR_BLACK); //window borders
+    init_pair(21, COLOR_WHITE,  COLOR_BLACK); //window borders
+    init_pair(22, COLOR_WHITE,  COLOR_BLACK); //end of line animation
 
     /* Set random seed. */
     srandom(time(NULL)+37);
@@ -127,8 +134,8 @@ namespace Bastet{
 
   Ui::Ui(int argc, char **argv):_width(10),_height(20),
 				_wellWin(_height,2*_width),
-				_nextWin(5,15,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
-				_scoreWin(7,15,_nextWin.GetMaxY(),_nextWin.GetMinX())
+				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
+				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
   }
 
@@ -162,8 +169,8 @@ namespace Bastet{
     wrefresh(w);
   }
 
-  int Ui::ChooseLevel(){
-    int level=0;
+  void Ui::ChooseLevel(){
+    _level=0;
     int ch='0';
     format fmt("    Bastet\n"
 	       "\n"
@@ -172,16 +179,16 @@ namespace Bastet{
 	       "<SPACE> to start\n");
     string msg;
     while(ch!=' '){
-      msg=str(fmt % level);
+      msg=str(fmt % _level);
       PrepareUiGetch();
       MessageDialog(msg);
       ch=getch();
       switch(ch){
       case '0'...'9':
-	level=ch-'0';
+	_level=ch-'0';
       }
     }
-    return level;
+    assert(_level>=0 && _level<=9);
   }
 
   void Ui::RedrawStatic(){
@@ -206,16 +213,15 @@ namespace Bastet{
   //must be <1E+06, because it should fit into a timeval usec field(see man select)
   static const boost::array<int,10> delay = {{999999, 770000, 593000, 457000, 352000, 271000, 208000, 160000, 124000, 95000}};
 
-  int Ui::DropBlock(Well &w, const Block &b, int level){
+  void Ui::DropBlock(Well &w, const Block &b){
     fd_set in, tmp_in;
     struct timeval time;
-    int blockscore=0; //scoring as per tetris guidelines, 1 for each soft-drop, 2 for each hard drop
 
     FD_ZERO(&in);
     FD_SET(0,&in); //adds stdin
     
     time.tv_sec=0;
-    time.tv_usec=delay[level];
+    time.tv_usec=delay[_level];
     
     //assumes nodelay(stdscr,TRUE) has already been called
     FallingBlock fb(b,w);    
@@ -229,7 +235,7 @@ namespace Bastet{
 	if(!fb.MoveDown(w))
 	  break;
 	time.tv_sec=0;
-	time.tv_usec=delay[level];
+	time.tv_usec=delay[_level];
       }
       else{ //keypress
 	int ch=getch();
@@ -240,18 +246,21 @@ namespace Bastet{
 	else if(ch==KEY_DOWN){
 	  bool val=fb.MoveDown(w);
 	  if(val){
-	    blockscore++;
+	    //_points++;
+	    //RedrawScore();
 	    time.tv_sec=0;
-	    time.tv_usec=delay[level];
+	    time.tv_usec=delay[_level];
 	  }
 	  else break;
 	}
-	else if(ch==' ')
+	else if(ch==KEY_UP)
 	  fb.RotateCW(w);
 	else if(ch==KEY_BACKSPACE)
 	  fb.RotateCCW(w);
-	else if(ch==KEY_UP){
-	  blockscore+=2*fb.HardDrop(w);
+	else if(ch==' '){
+	  fb.HardDrop(w);
+	  //_points+=2*fb.HardDrop(w);
+	  //RedrawScore();
 	  break;
 	}
 	else if(ch=='p'){
@@ -262,7 +271,28 @@ namespace Bastet{
       } //keypress switch
       RedrawWell(w,fb);
     } //while(1) vvv piece locked
-    w.Lock(fb);
+    std::vector<int> v=w.Lock(fb);
+    RedrawWell(w,fb);
+    if(!v.empty()){
+      CompletedLinesAnimation(v);
+      w.ClearLines(v);
+      _lines+=v.size();
+      switch(v.size()){
+      case 1:
+	_points+=100;
+	break;
+      case 2:
+	_points+=300;
+	break;
+      case 3:
+	_points+=500;
+	break;
+      case 4:
+	_points+=800;
+	break;
+      }
+      RedrawScore();
+    }
   }
 
   void Ui::RedrawWell(const Well &w, const FallingBlock &fb){
@@ -277,31 +307,59 @@ namespace Bastet{
   }
 
   void Ui::RedrawNext(const Block &next){
-    //TODO: STUB
+    wmove((WINDOW*)_nextWin,1,0);
+    wclrtobot((WINDOW*)_nextWin);
+    
+    BOOST_FOREACH(const Dot &d, next.GetDots((Dot){2,2},Block::InitialOrientation()))
+      _nextWin.DrawDot(d,next.GetColor());
+    wrefresh(_nextWin);
     return;
   }
 
-  void Ui::RedrawScore(int score, int lines, int level){
-    //TODO: STUB
+  void Ui::RedrawScore(){
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(17));
+    mvwprintw(_scoreWin,1,7,"%6d",_points);
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(18));
+    mvwprintw(_scoreWin,3,7,"%6d",_lines);
+    wattrset((WINDOW*)_scoreWin,COLOR_PAIR(19));
+    mvwprintw(_scoreWin,5,7,"%6d",_level);
+    wrefresh(_scoreWin);
     return;
   }
 
-  int Ui::Play(int level){
+  void Ui::CompletedLinesAnimation(const std::vector<int> &completed){
+    wattrset((WINDOW*)_wellWin,COLOR_PAIR(22));
+    for(int i=0;i<6;++i){
+      BOOST_FOREACH(int k, completed){
+	wmove(_wellWin,k,0);
+	whline(_wellWin, i%2?' ':':',_width*2);
+      }
+      wrefresh(_wellWin);
+      usleep(500000/6);
+    }
+  }
+
+  void Ui::Play(){
+    _points=0;
+    _lines=0;
     RedrawStatic();
-    int points=0;
-    int lines=0;
+    RedrawScore();
     Well w(_width,_height);
+    Block *current=0;
     Block *next=&blocks[random()%7];
+    RedrawNext(*next);
     nodelay(stdscr,TRUE);
     try{
       while(true){
-	DropBlock(w,*next,0);
+	current=next;
 	next=&blocks[random()%7];
+	RedrawNext(*next);
+	DropBlock(w,*current);
       }
     } catch(GameOver &go){
 
     }
-    return points;
+    return;
   }
 
 }

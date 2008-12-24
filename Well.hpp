@@ -4,6 +4,8 @@
 #include "Block.hpp" //for Color
 #include "FallingBlock.hpp"
 #include <cstddef> //size_t
+#include <vector>
+#include <bitset>
 
 namespace Bastet{
   
@@ -27,7 +29,9 @@ namespace Bastet{
     size_t GetWidth() const;
     size_t GetHeight() const;
     bool Accomodates(const DotMatrix &d) const; //true if the given tetromino fits into the well
-    void Lock(const FallingBlock &fb); //permanently adds a tetromino to the well
+    bool IsLineComplete(int y) const;
+    std::vector<int> Lock(const FallingBlock &fb); //permanently adds a tetromino to the well; returns a bitset of 4 bits where return[i]==1 iff line (start of fb)+i is complete
+    void ClearLines(const std::vector<int> &completed); //removes the given lines from the well (whether they are completed or not)
   };
 
 }

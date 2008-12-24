@@ -8,6 +8,9 @@
 #include <curses.h>
 
 namespace Bastet{
+  typedef std::pair<int,int> Score; //(points, lines)
+  Score &operator +=(Score &a, const Score &b);
+
   class BorderedWindow{
   private:
     WINDOW *_window;
@@ -37,13 +40,17 @@ namespace Bastet{
     void RedrawStatic(); //redraws the "static" parts of the screen
     void RedrawWell(const Well &well, const FallingBlock &fb);
     void RedrawNext(const Block &next);
-    void RedrawScore(int score, int lines, int level);
-    int DropBlock(Well &w, const Block &b, int level);
+    void RedrawScore();
+    void CompletedLinesAnimation(const std::vector<int> &completed);
+    void DropBlock(Well &w, const Block &b); //returns <score,lines>
     
-    int ChooseLevel();
-    int Play(int level); ///returns points
+    void ChooseLevel();
+    void Play();
     bool ShowScores(); ///returns true if wants to play again
   private:
+    int _level;
+    int _points;
+    int _lines;
     Curses _curses;
     size_t _width;
     size_t _height;

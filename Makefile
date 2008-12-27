@@ -1,4 +1,4 @@
-SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp FallingBlock.cpp
+SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp FallingBlock.cpp Config.cpp
 PROGNAME=bastet
 LDFLAGS+=-lncurses
 CXXFLAGS+=-ggdb -Wall
@@ -11,7 +11,7 @@ depend: *.hpp $(SOURCES)
 include depend
 
 $(PROGNAME): $(SOURCES:.cpp=.o)
-	$(CXX) -ggdb -o $(PROGNAME) $(SOURCES:.cpp=.o) $(LDFLAGS)
+	$(CXX) -ggdb -o $(PROGNAME) $(SOURCES:.cpp=.o) $(LDFLAGS) -lboost_program_options
 
 clean:
 	rm -f $(SOURCES:.cpp=.o) $(PROGNAME)

@@ -132,7 +132,7 @@ namespace Bastet{
     srandom(time(NULL)+37);
   }
 
-  Ui::Ui(int argc, char **argv):_width(10),_height(20),
+  Ui::Ui():_width(10),_height(20),
 				_wellWin(_height,2*_width),
 				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
 				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())

@@ -34,7 +34,7 @@ namespace Bastet{
 
   class Ui{
   public:
-    Ui(int argc,char **argv);
+    Ui();
     void MessageDialog(const std::string &message);
     void InputDialog(const std::string &message, const std::string &defaultin);
     void RedrawStatic(); //redraws the "static" parts of the screen

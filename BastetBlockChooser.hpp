@@ -1,0 +1,8 @@
+#ifndef BASTET_BLOCK_CHOOSER_HPP
+#define BASTET_BLOCK_CHOOSER_HPP
+
+namespace Bastet{
+
+}
+
+#endif //BASTET_BLOCK_CHOOSER_HPP

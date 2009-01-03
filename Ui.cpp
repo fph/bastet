@@ -1,6 +1,7 @@
 #include "Ui.hpp"
 #include "FallingBlock.hpp"
 #include "Config.hpp"
+#include "BlockChooser.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -437,15 +438,18 @@ namespace Bastet{
     RedrawScore();
     Well w(_width,_height);
     Block *current=0;
-    Block *next=&blocks[random()%7];
-    RedrawNext(*next);
+    Block *next=0;
     nodelay(stdscr,TRUE);
+    RandomBlockChooser bc;
+    StartingSet ss=bc.ChooseStartingSet();
+    current=ss.first;
+    next=ss.second;
     try{
       while(true){
-	current=next;
-	next=&blocks[random()%7];
 	RedrawNext(*next);
 	DropBlock(w,*current);
+	current=next;
+	next=bc.Choose(&w,current);
       }
     } catch(GameOver &go){
 

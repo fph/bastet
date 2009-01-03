@@ -1,7 +1,6 @@
 #ifndef CONFIG_HPP
 #define CONFIG_HPP
 
-#include <boost/program_options.hpp>
 #include <vector>
 #include <string>
 
@@ -20,26 +19,35 @@ namespace Bastet{
   struct HighScore{
     int Score;
     std::string Scorer;
+    bool operator < (const HighScore &b) const{
+      return Score<b.Score;
+    }
+    bool operator ==(const HighScore &b) const{
+      return (Score==b.Score) && (Scorer==b.Scorer);
+    }
   };
 
   extern const size_t HowManyHighScores; //how many high scores to save in the file
+
+  class HighScores: public std::vector<HighScore>{ //a set would not do the right job (think to ties)
+  public:
+    bool Qualifies(int score);
+    int InsertHighScore(int score, const std::string &scorer); //returns position (1 to HowManyHighScores), -1 if you don't make into the list
+  };
+
   extern const std::string RcFileName;
   extern const std::string LocalHighScoresFileName;
   extern const std::string GlobalHighScoresFileName;
 
-  typedef std::vector<HighScore> HighScores;
-
   class Config{
   private:
-    boost::program_options::variables_map _options;
-    boost::program_options::variables_map _highScores;
+    Keys _keys;
+    HighScores _hs;
   public:
     Config();
    ~Config();
-    Keys GetKeys();
-    void SetKeys(const Keys &k);
-    HighScores GetHighScores();
-    int PushHighScore(const std::string &scorer, int score); //returns position, -1 if it did not make into the high scorers
+    Keys *GetKeys();
+    HighScores *GetHighScores();
   };
 
   extern Config config; //singleton

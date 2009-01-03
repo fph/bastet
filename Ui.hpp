@@ -35,8 +35,10 @@ namespace Bastet{
   class Ui{
   public:
     Ui();
-    void MessageDialog(const std::string &message);
-    void InputDialog(const std::string &message, const std::string &defaultin);
+    void MessageDialog(const std::string &message); //shows msg, ask for "space"
+    std::string InputDialog(const std::string &message); //asks for a string
+    int KeyDialog(const std::string &message); //asks for a single key
+    int MenuDialog(const std::vector<std::string> &choices); //asks to choose one, returns index
     void RedrawStatic(); //redraws the "static" parts of the screen
     void RedrawWell(const Well &well, const FallingBlock &fb);
     void RedrawNext(const Block &next);
@@ -46,7 +48,9 @@ namespace Bastet{
     
     void ChooseLevel();
     void Play();
-    bool ShowScores(); ///returns true if wants to play again
+    void HandleHighScores(); ///if needed, asks name for highscores
+    void ShowHighScores();
+    void CustomizeKeys();
   private:
     int _level;
     int _points;

@@ -1,10 +1,12 @@
 #include "Ui.hpp"
 #include "FallingBlock.hpp"
+#include "Config.hpp"
 
 #include <cstdio>
 #include <cstdlib>
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 using namespace boost;
@@ -140,21 +142,13 @@ namespace Bastet{
   }
 
   Dot BoundingRect(const std::string &message){ //returns x and y of the minimal rectangle containing the given string
-    size_t height=0;
-    size_t width=0;
-    size_t start=0;
-    bool terminate=false;
-    while(!terminate){
-      size_t next=message.find('\n',start);
-      if(next==string::npos){
-	next=message.size();
-	terminate=true;
-      }
-      width=max(width,next-start);
-      start=next+1;
-      height++;
+    vector<string> splits;
+    split(splits,message,is_any_of("\n"));
+    size_t maxlen=0;
+    BOOST_FOREACH(string &s, splits){
+      maxlen=max(maxlen,s.size());
     }
-    return (Dot){width,height};
+    return (Dot){maxlen+1,splits.size()};
   }
 
   void Ui::MessageDialog(const std::string &message){
@@ -167,21 +161,113 @@ namespace Bastet{
     mvwprintw(w,0,0,message.c_str());
     w.RedrawBorder();
     wrefresh(w);
+    PrepareUiGetch();
+    int ch;
+    do{
+      ch=getch();
+    }
+    while(ch!=' ' && ch!=13); //13=return key!=KEY_ENTER, it seems
   }
 
+  std::string Ui::InputDialog(const std::string &message){
+    RedrawStatic();
+    Dot d=BoundingRect(message);
+    d.y+=3;
+    BorderedWindow w(d.y,d.x);
+    wattrset((WINDOW *)w,COLOR_PAIR(20));
+    mvwprintw(w,0,0,message.c_str());
+    w.RedrawBorder();
+    wrefresh(w);
+    PrepareUiGetch();
+    //nocbreak();
+    echo();
+    curs_set(1);
+    char buf[51];
+    mvwgetnstr(w,d.y-2,1,buf,50);
+    curs_set(0);
+    noecho();
+    return string(buf);
+  }
+  
+  int Ui::KeyDialog(const std::string &message){
+    RedrawStatic();
+
+    Dot d=BoundingRect(message);
+
+    BorderedWindow w(d.y,d.x);
+    wattrset((WINDOW *)w,COLOR_PAIR(20));
+    mvwprintw(w,0,0,message.c_str());
+    w.RedrawBorder();
+    wrefresh(w);
+    PrepareUiGetch();
+    return getch();
+  }
+  
+  int Ui::MenuDialog(const vector<string> &choices){
+    RedrawStatic();
+    size_t width=0;
+    BOOST_FOREACH(const string &s, choices){
+      width=max(width,s.size());
+    }
+
+    Dot d={width+5,choices.size()};
+    BorderedWindow w(d.y,d.x);
+    wattrset((WINDOW *)w,COLOR_PAIR(20));
+    for(size_t i=0;i<choices.size();++i){
+      mvwprintw(w,i,4,choices[i].c_str());
+    }
+    w.RedrawBorder();
+    wrefresh(w);
+    PrepareUiGetch();
+    size_t chosen=0;
+    int ch;
+    bool done=false;
+    mvwprintw(w,chosen,1,"-> ");
+    wrefresh(w);
+    do{
+      ch=getch();
+      switch(ch){
+      case KEY_UP:
+	if(chosen==0) break;
+	mvwprintw(w,chosen,1,"   ");
+	chosen--;
+	mvwprintw(w,chosen,1,"-> ");
+	wrefresh(w);
+	break;
+      case KEY_DOWN:
+	if(chosen==choices.size()-1) break;
+	mvwprintw(w,chosen,1,"   ");
+	chosen++;
+	mvwprintw(w,chosen,1,"-> ");
+	wrefresh(w);
+	break;
+      case 13: //ENTER
+      case ' ':
+	done=true;
+	break;
+      }
+    } while(!done);
+    return chosen;
+  }
+  
   void Ui::ChooseLevel(){
+    RedrawStatic();
     _level=0;
     int ch='0';
-    format fmt("    Bastet\n"
-	       "\n"
-	       "Starting level = %1% \n"
-	       "0-9 to change\n"
-	       "<SPACE> to start\n");
+    format fmt("    Get ready!\n"
+	       " \n"
+	       " Starting level = %1% \n"
+	       " 0-9 to change\n"
+	       " <SPACE> to start\n");
     string msg;
     while(ch!=' '){
       msg=str(fmt % _level);
       PrepareUiGetch();
-      MessageDialog(msg);
+      Dot d=BoundingRect(msg );
+      BorderedWindow w(d.y,d.x);
+      wattrset((WINDOW *)w,COLOR_PAIR(20));
+      mvwprintw(w,0,0,msg.c_str());
+      w.RedrawBorder();
       ch=getch();
       switch(ch){
       case '0'...'9':
@@ -192,6 +278,8 @@ namespace Bastet{
   }
 
   void Ui::RedrawStatic(){
+    erase();
+    wrefresh(stdscr);
     _wellWin.RedrawBorder();
     _nextWin.RedrawBorder();
     _scoreWin.RedrawBorder();
@@ -207,7 +295,6 @@ namespace Bastet{
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(19));
     mvwprintw(_scoreWin,5,0,"Level:");
     wrefresh(_scoreWin);
-
   }
 
   //must be <1E+06, because it should fit into a timeval usec field(see man select)
@@ -227,6 +314,7 @@ namespace Bastet{
     FallingBlock fb(b,w);    
 
     RedrawWell(w,fb);
+    Keys *keys=config.GetKeys();
 
     while(1){ //break = tetromino locked
       tmp_in=in;
@@ -239,11 +327,11 @@ namespace Bastet{
       }
       else{ //keypress
 	int ch=getch();
-	if(ch==KEY_LEFT)
+	if(ch==keys->Left)
 	  fb.MoveLeft(w);
-	else if(ch==KEY_RIGHT)
+	else if(ch==keys->Right)
 	  fb.MoveRight(w);
-	else if(ch==KEY_DOWN){
+	else if(ch==keys->Down){
 	  bool val=fb.MoveDown(w);
 	  if(val){
 	    //_points++;
@@ -253,18 +341,21 @@ namespace Bastet{
 	  }
 	  else break;
 	}
-	else if(ch==KEY_UP)
+	else if(ch==keys->RotateCW)
 	  fb.RotateCW(w);
-	else if(ch==KEY_BACKSPACE)
+	else if(ch==keys->RotateCCW)
 	  fb.RotateCCW(w);
-	else if(ch==' '){
+	else if(ch==keys->Drop){
 	  fb.HardDrop(w);
 	  //_points+=2*fb.HardDrop(w);
 	  //RedrawScore();
 	  break;
 	}
-	else if(ch=='p'){
-	  //TODO: stub, pause
+	else if(ch==keys->Pause){
+	  MessageDialog("Press SPACE or ENTER to resume the game");
+	  RedrawStatic();
+	  RedrawWell(w,fb);
+	  nodelay(stdscr,TRUE);
 	}
 	else {} //default...
 
@@ -362,4 +453,42 @@ namespace Bastet{
     return;
   }
 
+  void Ui::HandleHighScores(){
+    HighScores *hs=config.GetHighScores();
+    if(hs->Qualifies(_points)){
+      string name=InputDialog(" Congratulations! You got a high score \n Please enter your name");
+      hs->InsertHighScore(_points,name);
+    }else{
+      MessageDialog("You did not get into\n"
+		    "the high score list!\n"
+		    "\n"
+		    "     Try again!\n"
+		    );
+    }
+  }
+
+  void Ui::ShowHighScores(){
+    HighScores *hs=config.GetHighScores();
+    //shows highscores anyway
+    string allscores;
+    format fmt("%20.20s %8d\n");
+    for(HighScores::reverse_iterator it=hs->rbegin();it!=hs->rend();++it){
+      allscores+=str(fmt % it->Scorer % it->Score);
+    }
+    MessageDialog(allscores);
+  }
+
+  void Ui::CustomizeKeys(){
+    Keys *keys=config.GetKeys();
+    format fmt(
+      "Press the key you wish to use for:\n\n"
+      "%=1.34s\n\n");
+    keys->Down=KeyDialog(str(fmt % "move tetromino DOWN (soft-drop)"));
+    keys->Left=KeyDialog(str(fmt % "move tetromino LEFT"));
+    keys->Right=KeyDialog(str(fmt % "move tetromino RIGHT"));
+    keys->RotateCW=KeyDialog(str(fmt % "rotate tetromino CLOCKWISE"));
+    keys->RotateCCW=KeyDialog(str(fmt % "rotate tetromino COUNTERCLOCKWISE"));
+    keys->Drop=KeyDialog(str(fmt % "DROP tetromino (move down as much as possible immediately)"));
+    keys->Pause=KeyDialog(str(fmt % "PAUSE the game"));
+  }
 }

@@ -471,7 +471,7 @@ namespace Bastet{
     HighScores *hs=config.GetHighScores();
     //shows highscores anyway
     string allscores;
-    format fmt("%20.20s %8d\n");
+    format fmt("%-20.20s %8d\n");
     for(HighScores::reverse_iterator it=hs->rbegin();it!=hs->rend();++it){
       allscores+=str(fmt % it->Scorer % it->Score);
     }

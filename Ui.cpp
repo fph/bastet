@@ -448,6 +448,7 @@ namespace Bastet{
     next=ss.second;
     try{
       while(true){
+	while(getch()!=ERR); //ignores the keys pressed during the next block calculation
 	RedrawNext(next);
 	DropBlock(w,current);
 	current=next;

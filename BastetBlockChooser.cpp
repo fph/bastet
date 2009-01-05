@@ -3,6 +3,7 @@
 #include "Block.hpp"
 
 #include <boost/functional/hash.hpp>
+#include <boost/foreach.hpp>
 #include <tr1/unordered_set>
 #include <cstdlib>
 
@@ -16,12 +17,23 @@ using namespace std;
 
 namespace Bastet{
   int Evaluate(const Well *w, int extralines){
-    //TODO:STUB
-    return 100*extralines;
+    //high=good for player
+    //lines
+    int score=100000*extralines;
+    
+    //sums "free" height of each column (penalizes "holes")
+    for(int i=0;i<WellWidth;++i){
+      Dot d;
+      for(d=(Dot){i,-2}; d.y<WellHeight;d.y++){
+	if((*w)(d)!=0) break;
+      }
+      score+=100*d.y;
+    }
+
+    return score;
   }
 
   BastetBlockChooser::BastetBlockChooser(){
-    
   }
   
   BastetBlockChooser::~BastetBlockChooser(){
@@ -44,27 +56,25 @@ namespace Bastet{
     return make_pair(first,BlockType(random()%7));
   }
 
-  BlockType BastetBlockChooser::Choose(const Well *well, BlockType currentBlock){
-#if 0
-    BestScoreVisitor visitor(0);
-    int minscore=GameOverScore;
-    BlockType minpos=O;
-    for(int i=0;i<7;++i){
-      Searcher(well,FallingBlock(BlockType(i),*well),&visitor);
-      if(visitor.GetScore()<minscore){
-	minscore=visitor.GetScore();
-	minpos=BlockType(i);
-      }
-    }
-    return minpos;
-#endif
-
-#if 0
+  boost::array<int,7> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
     RecursiveVisitor visitor;
     Searcher(well,FallingBlock(currentBlock,*well),&visitor);
-    return BlockType(min_element(visitor.GetScores().begin(),visitor.GetScores().end())-visitor.GetScores().begin());
-#endif
-    return BlockType(random()%7);
+    return visitor.GetScores();
+  }
+
+
+  BlockType BastetBlockChooser::Choose(const Well *well, BlockType currentBlock){
+    boost::array<int,7> mainScores=ComputeMainScores(well,currentBlock);
+    boost::array<int,7> finalScores=mainScores;
+
+    //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
+
+    //TODO!!
+    
+
+    
+    return BlockType(min_element(finalScores.begin(),finalScores.end())-finalScores.begin());
+    //return BlockType(random()%7);
   }
 
   Searcher::Searcher(const Well *well, Vertex v, WellVisitor *visitor):_well(well),_visitor(visitor){
@@ -85,7 +95,6 @@ namespace Bastet{
 	_visitor->Visit(_well,v);
       }
     }
-#if 0
     {
       Vertex v2(v);
       if(v2.MoveLeft(*_well))
@@ -106,7 +115,6 @@ namespace Bastet{
       if(v2.RotateCCW(*_well))
 	DFSVisit(v2);
     }
-#endif
   }
 
   BestScoreVisitor::BestScoreVisitor(int bonusLines):_score(GameOverScore),_bonusLines(bonusLines){};

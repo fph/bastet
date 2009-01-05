@@ -76,7 +76,13 @@ namespace Bastet{
     ~BastetBlockChooser();
     virtual StartingSet ChooseStartingSet();
     virtual BlockType Choose(const Well *well, BlockType currentBlock);
+    /**
+     * computes "scores" of the candidate next blocks by dropping them in all possible positions and choosing the one that has the least max_(drop positions) Evaluate(well)
+     */
+    boost::array<int,7> ComputeMainScores(const Well *well, BlockType currentBlock);
+
   private:
+    
   };
 
 }

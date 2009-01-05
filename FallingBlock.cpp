@@ -1,5 +1,6 @@
 #include "FallingBlock.hpp"
 #include <boost/foreach.hpp>
+#include <boost/functional/hash.hpp>
 
 namespace Bastet{
   FallingBlock::FallingBlock(BlockType block, const Well &w, const Dot &pos, Orientation orientation):
@@ -74,4 +75,18 @@ namespace Bastet{
     }
     return true;
   }
+
+  size_t hash_value(const FallingBlock &fb){
+    size_t seed=37;
+    boost::hash_combine(seed,fb._block);
+    boost::hash_combine(seed,fb._pos);
+    boost::hash_combine(seed,fb._orientation);
+    return seed;
+  }
+  
+  std::ostream &operator<<(std::ostream &s, const FallingBlock &fb){
+    s<<"pos:("<<fb._pos.x<<","<<fb._pos.y<<")or:"<<int(fb._orientation);
+    return s;
+  }
+  
 }

@@ -6,6 +6,10 @@
 
 namespace Bastet{
 
+  static const int WellHeight=20;
+  static const int WellWidth=10;
+  static const int RealWellHeight=WellHeight+2;
+  
   typedef int Color; //to be given to wattrset
   
   class Orientation{
@@ -49,6 +53,10 @@ namespace Bastet{
   struct Dot{
     int x;
     int y;
+    bool IsValid() const{
+      return (y>=-2) && y<WellHeight && (x>=0) && (x<WellWidth);
+    }
+
     Dot operator +(const Dot &d) const{
       return (Dot){x+d.x,y+d.y};
     }
@@ -59,6 +67,16 @@ namespace Bastet{
     DotMatrix operator +(const DotMatrix &b) const{
       return (DotMatrix){{*this+b[0],*this+b[1],*this+b[2],*this+b[3]}};
     }
+    bool operator==(const Dot &other) const{
+      return (x==other.x) && (y==other.y);
+    }
+    bool operator<(const Dot &other) const{
+      if(x==other.x)
+	return y<other.y;
+      else return x<other.x;
+    }
+
+    friend size_t hash_value(const Dot &d); //for use with boost::hash and unordered_set
   };
 
   class BlockImpl{

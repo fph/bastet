@@ -8,30 +8,32 @@
 #include <bitset>
 
 namespace Bastet{
-  
-  class FallingBlock; //forward
 
+  class FallingBlock; //forward
+  
   class GameOver{}; //used as an exception
+
+  class WellLine: public boost::array<Color,WellWidth>{
+
+  };
 
   /*
    * the real height of the well is _height+2, with the top two rows( -1 and -2) hidden (see guidelines)
    */
   class Well{
   private:
-    size_t _width,_height;
-    Color *_well;
+    boost::array<WellLine,RealWellHeight> _well;
   public:
-    Well(size_t width, size_t height);
+    Well();
     ~Well();
     void Clear();
-    Color operator()(int x, int y) const;
-    Color operator()(const Dot &p) const;
-    size_t GetWidth() const;
-    size_t GetHeight() const;
+    const Color &operator()(const Dot &p) const;
+    Color &operator()(const Dot &p);
     bool Accomodates(const DotMatrix &d) const; //true if the given tetromino fits into the well
     bool IsLineComplete(int y) const;
     std::vector<int> Lock(const FallingBlock &fb); //permanently adds a tetromino to the well; returns a bitset of 4 bits where return[i]==1 iff line (start of fb)+i is complete
     void ClearLines(const std::vector<int> &completed); //removes the given lines from the well (whether they are completed or not)
+    int LockAndClearLines(const FallingBlock &fb); //locks, clear lines, returns number of lines cleared
   };
 
 }

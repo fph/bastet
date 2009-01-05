@@ -56,8 +56,6 @@ namespace Bastet{
     int _points;
     int _lines;
     Curses _curses;
-    size_t _width;
-    size_t _height;
     BorderedWindow _wellWin;
     BorderedWindow _nextWin;
     BorderedWindow _scoreWin;

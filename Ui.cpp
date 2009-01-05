@@ -135,8 +135,8 @@ namespace Bastet{
     srandom(time(NULL)+37);
   }
 
-  Ui::Ui():_width(10),_height(20),
-				_wellWin(_height,2*_width),
+  Ui::Ui():
+				_wellWin(WellHeight,2*WellWidth),
 				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
 				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
@@ -388,9 +388,11 @@ namespace Bastet{
   }
 
   void Ui::RedrawWell(const Well &w, const FallingBlock &fb){
-    for(size_t i=0;i<_width;++i)
-      for(size_t j=0;j<_height;++j)
-	_wellWin.DrawDot((Dot){i,j},w(i,j));
+    for(int i=0;i<WellWidth;++i)
+      for(int j=0;j<WellHeight;++j){
+	Dot d={i,j};
+	_wellWin.DrawDot(d,w(d));
+      }
     
     BOOST_FOREACH(const Dot &d, fb.GetMatrix())
       _wellWin.DrawDot(d,fb.GetColor());
@@ -424,7 +426,7 @@ namespace Bastet{
     for(int i=0;i<6;++i){
       BOOST_FOREACH(int k, completed){
 	wmove(_wellWin,k,0);
-	whline(_wellWin, i%2?' ':':',_width*2);
+	whline(_wellWin, i%2?' ':':',WellWidth*2);
       }
       wrefresh(_wellWin);
       usleep(500000/6);
@@ -436,7 +438,7 @@ namespace Bastet{
     _lines=0;
     RedrawStatic();
     RedrawScore();
-    Well w(_width,_height);
+    Well w;
     BlockType current;
     BlockType next;
     nodelay(stdscr,TRUE);

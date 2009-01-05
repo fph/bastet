@@ -1,6 +1,7 @@
 #include "Block.hpp"
 
 #include "curses.h"
+#include <boost/functional/hash.hpp>
 
 namespace Bastet{
 
@@ -111,5 +112,11 @@ namespace Bastet{
   const Color GetColor(BlockType b){
     return blocks[b].GetColor();
   }
-  
+
+  size_t hash_value(const Dot &d){
+    size_t seed=37;
+    boost::hash_combine(seed,d.x);
+    boost::hash_combine(seed,d.y);
+    return seed;
+  }
 }

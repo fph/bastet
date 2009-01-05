@@ -14,7 +14,7 @@ namespace Bastet{
     BlockChooser();
     virtual ~BlockChooser();
     virtual StartingSet ChooseStartingSet()=0; //chooses first and second block
-    virtual BlockType Choose(Well *well, BlockType current)=0; //chooses next block
+    virtual BlockType Choose(const Well *well, BlockType current)=0; //chooses next block
   private:
   };
 
@@ -24,7 +24,7 @@ namespace Bastet{
     RandomBlockChooser();
     virtual ~RandomBlockChooser();
     virtual StartingSet ChooseStartingSet(); //chooses first and second block
-    virtual BlockType Choose(Well *well, BlockType current); //chooses next block    
+    virtual BlockType Choose(const Well *well, BlockType current); //chooses next block    
   private:
   };
 

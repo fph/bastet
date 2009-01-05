@@ -4,9 +4,11 @@
 #include "Block.hpp"
 #include "Well.hpp"
 
+#include <ostream>
+
 namespace Bastet{
   class Well; //forward
-  
+
   class FallingBlock{
   public:
     DotMatrix GetMatrix() const;
@@ -20,11 +22,25 @@ namespace Bastet{
     ~FallingBlock();
     Color GetColor() const;
     bool IsOutOfScreen() const; //to check for game over
+    bool operator==(const FallingBlock &other) const{return (_block==other._block) && (_pos==other._pos) && (_orientation==other._orientation);}
+    bool operator<(const FallingBlock &other) const{
+      if(_block==other._block){
+	if(_pos==other._pos){
+	  return _orientation<other._orientation;
+	} else return _pos<other._pos;
+      } else return _block<other._block;
+    }
+
+    friend size_t hash_value(const FallingBlock &fb); //for use with boost::hash and unordered_set
+
+  //mainly for debug
+    friend std::ostream &operator<<(std::ostream &s, const FallingBlock &fb);
   private:
     BlockType _block;
     Dot _pos; //position
     Orientation _orientation;
   };
+
 }
 
 #endif //FALLINGBLOCK_HPP

@@ -12,7 +12,7 @@ namespace Bastet{
   StartingSet RandomBlockChooser::ChooseStartingSet(){
     return std::make_pair(BlockType(random()%7),BlockType(random()%7));
   }
-  BlockType RandomBlockChooser::Choose(Well *well, BlockType next){
+  BlockType RandomBlockChooser::Choose(const Well *well, BlockType next){
     return BlockType(random()%7);
   }
   

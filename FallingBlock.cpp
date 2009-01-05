@@ -2,31 +2,30 @@
 #include <boost/foreach.hpp>
 
 namespace Bastet{
-  FallingBlock::FallingBlock(const Block &block, const Well &w, const Dot &pos, Orientation orientation):
+  FallingBlock::FallingBlock(BlockType block, const Well &w, const Dot &pos, Orientation orientation):
     _block(block),_pos(pos),_orientation(orientation){
     
-    const DotMatrix &m=_block.GetDots(_pos,_orientation);
-    if(!w.Accomodates(m))
+    if(!w.Accomodates(GetMatrix()))
       throw(GameOver());
   };
   
   FallingBlock::~FallingBlock(){};
   
   DotMatrix FallingBlock::GetMatrix() const{
-    return _block.GetDots(_pos,_orientation);
+    return blocks[_block].GetDots(_pos,_orientation);
   }
 
   bool FallingBlock::RotateCW(const Well &w){
-    Orientation o=_block.NextOrientation(_orientation);
-    if(!w.Accomodates(_block.GetDots(_pos,o)))
+    Orientation o=_orientation.Next();
+    if(!w.Accomodates(blocks[_block].GetDots(_pos,o)))
       return false;
     _orientation=o;
     return true;
   }
   
   bool FallingBlock::RotateCCW(const Well &w){
-    Orientation o=_block.PreviousOrientation(_orientation);
-    if(!w.Accomodates(_block.GetDots(_pos,o)))
+    Orientation o=_orientation.Prior();
+    if(!w.Accomodates(blocks[_block].GetDots(_pos,o)))
       return false;
     _orientation=o;
     return true;
@@ -35,7 +34,7 @@ namespace Bastet{
   bool FallingBlock::MoveLeft(const Well &w){
     Dot newpos(_pos);
     newpos.x-=1;
-    if(!w.Accomodates(_block.GetDots(newpos,_orientation)))
+    if(!w.Accomodates(blocks[_block].GetDots(newpos,_orientation)))
       return false;
     _pos=newpos;
     return true;
@@ -44,7 +43,7 @@ namespace Bastet{
   bool FallingBlock::MoveRight(const Well &w){
     Dot newpos(_pos);
     newpos.x+=1;
-    if(!w.Accomodates(_block.GetDots(newpos,_orientation)))
+    if(!w.Accomodates(blocks[_block].GetDots(newpos,_orientation)))
       return false;
     _pos=newpos;
     return true;
@@ -53,7 +52,7 @@ namespace Bastet{
   bool FallingBlock::MoveDown(const Well &w){
     Dot newpos(_pos);
     newpos.y+=1;
-    if(!w.Accomodates(_block.GetDots(newpos,_orientation)))
+    if(!w.Accomodates(blocks[_block].GetDots(newpos,_orientation)))
       return false;
     _pos=newpos;
     return true;
@@ -66,7 +65,7 @@ namespace Bastet{
   }
 
   Color FallingBlock::GetColor() const{
-    return _block.GetColor();
+    return blocks[_block].GetColor();
   }
 
   bool FallingBlock::IsOutOfScreen() const{

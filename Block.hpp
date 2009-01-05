@@ -7,7 +7,40 @@
 namespace Bastet{
 
   typedef int Color; //to be given to wattrset
-  typedef short Orientation;
+  
+  class Orientation{
+  public:
+    Orientation(unsigned char o=0):_o(o){}
+    operator unsigned char() const{
+      return _o;
+    }
+    Orientation operator++(){
+      return (++_o & 3);
+    }
+    Orientation Next() const{
+      return ((_o+1) & 3);
+    }
+    Orientation operator--(){
+      return (--_o & 3);
+    }
+    Orientation Prior() const{
+      return((_o-1) & 3);
+    }
+    const static size_t Number=4;
+  private:
+    unsigned char _o;
+  };
+
+  enum BlockType{
+    O=0,
+    I=1,
+    Z=2,
+    T=3,
+    J=4,
+    S=5,
+    L=6
+  };
+
   struct Dot;
 
   typedef boost::array<Dot,4> DotMatrix; //the four dots occupied by a tetromino
@@ -28,32 +61,28 @@ namespace Bastet{
     }
   };
 
-  class Block{
+  class BlockImpl{
   private:
     const OrientationMatrix _matrix;
     const Color _color;
   public:
-    Block(Color c, const OrientationMatrix &m):_matrix(m),_color(c){};
-    ~Block(){};
+    BlockImpl(Color c, const OrientationMatrix &m):_matrix(m),_color(c){};
+    ~BlockImpl(){};
     /**
      * returns an array of 4 (x,y) pair for the occupied dots
      */
     DotMatrix GetDots(Dot position, Orientation orientation) const
     {return position+_matrix[orientation];}
     Color GetColor() const {return _color;};
-    Orientation NextOrientation(Orientation &o) const
-    {return (o+1) % 4;}
-    //{return (o+1==HowManyOrientations())?0:(o+1);}
-    Orientation PreviousOrientation(Orientation &o) const
-    {return (o+3) % 4;}
-    //{return (o==0)?HowManyOrientations()-1:(o-1);}
-    static Orientation HowManyOrientations()
-    {return 4;}
-    static Orientation InitialOrientation()
-    {return 0;}
   };
 
-  extern boost::array<Block,7> blocks;
+  typedef boost::array<BlockImpl,7> BlockArray;
+  extern BlockArray blocks;
+
+  //should be members, but BlockType is an enum...
+  const DotMatrix GetDots(BlockType b, Dot position, Orientation o);
+  const Color GetColor(BlockType b);
+
 }
 
 #endif //BLOCK_HPP

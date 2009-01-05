@@ -13,11 +13,11 @@ namespace Bastet{
   }
 
   StartingSet BastetBlockChooser::ChooseStartingSet(){
-    return std::make_pair(&blocks[random()%7],&blocks[random()%7]);
+    return std::make_pair(BlockType(random()%7),BlockType(random()%7));
   }
 
-  Block *Choose(Well *well, Block* currentBlock){
-    return &blocks[random()%7];
+  BlockType Choose(Well *well, BlockType currentBlock){
+    return BlockType(random()%7);
   }
 
 }

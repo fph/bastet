@@ -41,10 +41,10 @@ namespace Bastet{
     int MenuDialog(const std::vector<std::string> &choices); //asks to choose one, returns index
     void RedrawStatic(); //redraws the "static" parts of the screen
     void RedrawWell(const Well &well, const FallingBlock &fb);
-    void RedrawNext(const Block &next);
+    void RedrawNext(BlockType next);
     void RedrawScore();
     void CompletedLinesAnimation(const std::vector<int> &completed);
-    void DropBlock(Well &w, const Block &b); //returns <score,lines>
+    void DropBlock(Well &w, BlockType b); //returns <score,lines>
     
     void ChooseLevel();
     void Play();

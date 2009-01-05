@@ -16,12 +16,12 @@ namespace Bastet{
     bool MoveRight(const Well &w);
     bool MoveDown(const Well &w); //returns false if it could not
     int HardDrop(const Well &w); ///move down as much as you can, returns number of times it went down
-    FallingBlock(const Block &block, const Well &w, const Dot &pos=(Dot){3,-2}, Orientation orientation=Block::InitialOrientation());
+    FallingBlock(BlockType _block, const Well &w, const Dot &pos=(Dot){3,-2}, Orientation orientation=Orientation());
     ~FallingBlock();
     Color GetColor() const;
     bool IsOutOfScreen() const; //to check for game over
   private:
-    const Block &_block;
+    BlockType _block;
     Dot _pos; //position
     Orientation _orientation;
   };

@@ -301,7 +301,7 @@ namespace Bastet{
   //must be <1E+06, because it should fit into a timeval usec field(see man select)
   static const boost::array<int,10> delay = {{999999, 770000, 593000, 457000, 352000, 271000, 208000, 160000, 124000, 95000}};
 
-  void Ui::DropBlock(Well &w, const Block &b){
+  void Ui::DropBlock(Well &w, BlockType b){
     fd_set in, tmp_in;
     struct timeval time;
 
@@ -312,7 +312,7 @@ namespace Bastet{
     time.tv_usec=delay[_level];
     
     //assumes nodelay(stdscr,TRUE) has already been called
-    FallingBlock fb(b,w);    
+    FallingBlock fb(b,w);
 
     RedrawWell(w,fb);
     Keys *keys=config.GetKeys();
@@ -398,12 +398,12 @@ namespace Bastet{
     wrefresh(_wellWin);
   }
 
-  void Ui::RedrawNext(const Block &next){
+  void Ui::RedrawNext(BlockType next){
     wmove((WINDOW*)_nextWin,1,0);
     wclrtobot((WINDOW*)_nextWin);
     
-    BOOST_FOREACH(const Dot &d, next.GetDots((Dot){2,2},Block::InitialOrientation()))
-      _nextWin.DrawDot(d,next.GetColor());
+    BOOST_FOREACH(const Dot &d, GetDots(next,(Dot){2,2},Orientation()))
+      _nextWin.DrawDot(d,GetColor(next));
     wrefresh(_nextWin);
     return;
   }
@@ -437,8 +437,8 @@ namespace Bastet{
     RedrawStatic();
     RedrawScore();
     Well w(_width,_height);
-    Block *current=0;
-    Block *next=0;
+    BlockType current;
+    BlockType next;
     nodelay(stdscr,TRUE);
     RandomBlockChooser bc;
     StartingSet ss=bc.ChooseStartingSet();
@@ -446,8 +446,8 @@ namespace Bastet{
     next=ss.second;
     try{
       while(true){
-	RedrawNext(*next);
-	DropBlock(w,*current);
+	RedrawNext(next);
+	DropBlock(w,current);
 	current=next;
 	next=bc.Choose(&w,current);
       }

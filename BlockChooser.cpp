@@ -1,6 +1,5 @@
 #include "BlockChooser.hpp"
 
-#include "Block.hpp"
 #include <cstdlib> //random
 
 namespace Bastet{
@@ -11,10 +10,10 @@ namespace Bastet{
   RandomBlockChooser::RandomBlockChooser(){}
   RandomBlockChooser::~RandomBlockChooser(){}
   StartingSet RandomBlockChooser::ChooseStartingSet(){
-    return std::make_pair(&blocks[random()%7],&blocks[random()%7]);
+    return std::make_pair(BlockType(random()%7),BlockType(random()%7));
   }
-  Block *RandomBlockChooser::Choose(Well *well, Block *next){
-    return &blocks[random()%7];
+  BlockType RandomBlockChooser::Choose(Well *well, BlockType next){
+    return BlockType(random()%7);
   }
   
 }

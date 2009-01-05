@@ -9,7 +9,7 @@ namespace Bastet{
     BastetBlockChooser();
     ~BastetBlockChooser();
     virtual StartingSet ChooseStartingSet();
-    virtual Block *Choose(Well *well, Block *currentBlock);
+    virtual BlockType Choose(Well *well, BlockType currentBlock);
   private:
   };
 

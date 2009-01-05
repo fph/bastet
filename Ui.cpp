@@ -1,7 +1,7 @@
 #include "Ui.hpp"
 #include "FallingBlock.hpp"
 #include "Config.hpp"
-#include "BlockChooser.hpp"
+#include "BastetBlockChooser.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -440,7 +440,7 @@ namespace Bastet{
     BlockType current;
     BlockType next;
     nodelay(stdscr,TRUE);
-    RandomBlockChooser bc;
+    BastetBlockChooser bc;
     StartingSet ss=bc.ChooseStartingSet();
     current=ss.first;
     next=ss.second;

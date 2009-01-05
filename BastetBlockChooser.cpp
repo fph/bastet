@@ -16,7 +16,7 @@ namespace Bastet{
     return std::make_pair(BlockType(random()%7),BlockType(random()%7));
   }
 
-  BlockType Choose(Well *well, BlockType currentBlock){
+  BlockType BastetBlockChooser::Choose(Well *well, BlockType currentBlock){
     return BlockType(random()%7);
   }
 

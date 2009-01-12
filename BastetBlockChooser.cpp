@@ -6,6 +6,7 @@
 #include <boost/foreach.hpp>
 #include <tr1/unordered_set>
 #include <cstdlib>
+#include <algorithm>
 
 //debug
 #include <fstream>
@@ -14,6 +15,7 @@
 #include <curses.h>
 
 using namespace std;
+using namespace boost;
 
 namespace Bastet{
   int Evaluate(const Well *w, int extralines){
@@ -69,11 +71,25 @@ namespace Bastet{
 
     //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
 
-    //TODO!!
-    
+    //old "stupid" algorithm -- TODO: something more elaborate would be advisable
 
+    //perturbes scores to randomize tie handling
+    BOOST_FOREACH(int &i, finalScores)
+      i+=(random()%32);
     
-    return BlockType(min_element(finalScores.begin(),finalScores.end())-finalScores.begin());
+    //finds which block we want
+    static const boost::array<int,7> blockPercentages={{75, 92, 98, 100, 100, 100, 100}};
+    int pos=find_if(blockPercentages.begin(),blockPercentages.end(),bind2nd(greater_equal<int>(),random()%100)) - blockPercentages.begin();
+    assert(pos>=0 && pos<7);
+
+    //finds index of the pos-th element (in increasing order) of the vector
+    //dumb algorithm, always returns the first in case of ties, but we don't care because of the randomization
+    boost::array<int,7> temp(finalScores);
+    nth_element(temp.begin(),temp.begin()+pos,temp.end());
+    int chosenBlock=find(finalScores.begin(),finalScores.end(),temp[pos])-finalScores.begin();
+    return BlockType(chosenBlock);
+    
+    //return BlockType(min_element(finalScores.begin(),finalScores.end())-finalScores.begin());
     //return BlockType(random()%7);
   }
 

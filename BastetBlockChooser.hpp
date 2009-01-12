@@ -63,8 +63,8 @@ namespace Bastet{
     typedef FallingBlock Vertex;
     Searcher(const Well *well, Vertex v, WellVisitor *visitor);
   private:
-    //std::tr1::unordered_set<Vertex> _visited;
-    std::set<Vertex> _visited;
+    std::tr1::unordered_set<Vertex> _visited;
+    //std::set<Vertex> _visited; ^^ the above is more efficient, we need to do many inserts
     const Well *_well;
     WellVisitor *_visitor;
     void DFSVisit(Vertex v);

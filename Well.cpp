@@ -12,42 +12,37 @@ namespace Bastet{
   }
 
   void Well::Clear(){
-    BOOST_FOREACH(WellLine &l, _well)
-      l.assign(0);
+    BOOST_FOREACH(WellLine &l, _well){
+      BOOST_FOREACH(bool &b, l){
+	b=false;
+      }
+    }
   }
 
-  const Color &Well::operator()(const Dot &d) const{
-    assert(d.IsValid());
-    return _well[d.y+2][d.x];
-  }
-  Color &Well::operator()(const Dot &d){
-    assert(d.IsValid());
-    return _well[d.y+2][d.x];
-  }
-  
   bool Well::Accomodates(const DotMatrix &m) const{
     BOOST_FOREACH(const Dot &d, m){
-      if(!d.IsValid() || operator()(d)!=0) return false;
+      if(!d.IsValid() || _well[d.y+2][d.x]==true) return false;
     }
     return true;
   }
 
   bool Well::IsLineComplete(int y) const{
     for(int x=0;x<(int)WellWidth;++x)
-      if(operator()((Dot){x,y})==0)
+      if(_well[y+2][x]==false)
 	return false;
     return true;
   }
 
-  std::vector<int> Well::Lock(const FallingBlock &fb){
+  std::vector<int> Well::Lock(BlockType t, const BlockPosition &p){
     std::vector<int> ret;
-    if(fb.IsOutOfScreen())
+    if(p.IsOutOfScreen(t))
       throw(GameOver());
-    BOOST_FOREACH(const Dot &d,fb.GetMatrix()){
-      operator()(d)=fb.GetColor();
+    BOOST_FOREACH(const Dot &d,p.GetDots(t)){
+      _well[d.y+2][d.x]=true;
       //check for completeness
       if(IsLineComplete(d.y)) ret.push_back(d.y);
     }
+    //TODO: XXX: remove duplicates
     sort(ret.begin(),ret.end());
     return ret;
   }
@@ -73,8 +68,8 @@ namespace Bastet{
     }
   }
 
-  int Well::LockAndClearLines(const FallingBlock &fb){
-    std::vector<int> v=Lock(fb);
+  int Well::LockAndClearLines(BlockType t, const BlockPosition &p){
+    std::vector<int> v=Lock(t,p);
     ClearLines(v);
     return v.size();
   }

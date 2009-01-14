@@ -1,7 +1,6 @@
 #include "Block.hpp"
 
 #include "curses.h"
-#include <boost/functional/hash.hpp>
 
 namespace Bastet{
 
@@ -106,17 +105,14 @@ namespace Bastet{
 	  }})
     }};
 
-  const DotMatrix GetDots(BlockType b, Dot position, Orientation o){
-    return blocks[b].GetDots(position,o);
-  }
+//   const DotMatrix GetDots(BlockType b, Dot position, Orientation o){
+//     return blocks[b].GetDots(position,o);
+//   }
   const Color GetColor(BlockType b){
     return blocks[b].GetColor();
   }
 
   size_t hash_value(const Dot &d){
-    size_t seed=37;
-    boost::hash_combine(seed,d.x);
-    boost::hash_combine(seed,d.y);
-    return seed;
+    return (d.x+5)*32+d.y;
   }
 }

@@ -1,7 +1,8 @@
 #include "Ui.hpp"
-#include "FallingBlock.hpp"
+#include "BlockPosition.hpp"
 #include "Config.hpp"
-#include "BastetBlockChooser.hpp"
+//#include "BastetBlockChooser.hpp"
+#include "BlockChooser.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -140,6 +141,7 @@ namespace Bastet{
 				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
 				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
+    _colors.assign(0);
   }
 
   Dot BoundingRect(const std::string &message){ //returns x and y of the minimal rectangle containing the given string
@@ -301,7 +303,7 @@ namespace Bastet{
   //must be <1E+06, because it should fit into a timeval usec field(see man select)
   static const boost::array<int,10> delay = {{999999, 770000, 593000, 457000, 352000, 271000, 208000, 160000, 124000, 95000}};
 
-  void Ui::DropBlock(Well &w, BlockType b){
+  void Ui::DropBlock(BlockType b, Well *w){
     fd_set in, tmp_in;
     struct timeval time;
 
@@ -312,16 +314,16 @@ namespace Bastet{
     time.tv_usec=delay[_level];
     
     //assumes nodelay(stdscr,TRUE) has already been called
-    FallingBlock fb(b,w);
+    BlockPosition p;
 
-    RedrawWell(w,fb);
+    RedrawWell(w,b,p);
     Keys *keys=config.GetKeys();
 
     while(1){ //break = tetromino locked
       tmp_in=in;
       int sel_ret=select(FD_SETSIZE,&tmp_in, NULL, NULL, &time);
       if(sel_ret==0){ //timeout
-	if(!fb.MoveDown(w))
+	if(!p.MoveIfPossible(Down,b,w))
 	  break;
 	time.tv_sec=0;
 	time.tv_usec=delay[_level];
@@ -329,11 +331,11 @@ namespace Bastet{
       else{ //keypress
 	int ch=getch();
 	if(ch==keys->Left)
-	  fb.MoveLeft(w);
+	  p.MoveIfPossible(Left,b,w);
 	else if(ch==keys->Right)
-	  fb.MoveRight(w);
+	  p.MoveIfPossible(Right,b,w);
 	else if(ch==keys->Down){
-	  bool val=fb.MoveDown(w);
+	  bool val=p.MoveIfPossible(Down,b,w);
 	  if(val){
 	    //_points++;
 	    //RedrawScore();
@@ -343,11 +345,11 @@ namespace Bastet{
 	  else break;
 	}
 	else if(ch==keys->RotateCW)
-	  fb.RotateCW(w);
+	  p.MoveIfPossible(RotateCW,b,w);
 	else if(ch==keys->RotateCCW)
-	  fb.RotateCCW(w);
+	  p.MoveIfPossible(RotateCCW,b,w);
 	else if(ch==keys->Drop){
-	  fb.HardDrop(w);
+	  p.Drop(b,w);
 	  //_points+=2*fb.HardDrop(w);
 	  //RedrawScore();
 	  break;
@@ -355,19 +357,30 @@ namespace Bastet{
 	else if(ch==keys->Pause){
 	  MessageDialog("Press SPACE or ENTER to resume the game");
 	  RedrawStatic();
-	  RedrawWell(w,fb);
+	  RedrawWell(w,b,p);
 	  nodelay(stdscr,TRUE);
 	}
 	else {} //default...
 
       } //keypress switch
-      RedrawWell(w,fb);
-    } //while(1) vvv piece locked
-    std::vector<int> v=w.Lock(fb);
-    RedrawWell(w,fb);
+      RedrawWell(w,b,p);
+    } //while(1) 
+
+    std::vector<int> v=w->Lock(b,p);
+    //locks also into _colors
+    BOOST_FOREACH(const Dot &d, p.GetDots(b))
+      if(d.y>=0)
+	_colors[d.y*WellWidth+d.x]=GetColor(b);
+
+    RedrawWell(w,b,p);
     if(!v.empty()){
       CompletedLinesAnimation(v);
-      w.ClearLines(v);
+      w->ClearLines(v);
+
+      if(( (_lines+v.size())/10 - _lines/10 !=0) && _level<9){
+	_level++;
+      }
+
       _lines+=v.size();
       switch(v.size()){
       case 1:
@@ -387,25 +400,26 @@ namespace Bastet{
     }
   }
 
-  void Ui::RedrawWell(const Well &w, const FallingBlock &fb){
+  void Ui::RedrawWell(const Well *w, BlockType b, const BlockPosition &p){
     for(int i=0;i<WellWidth;++i)
       for(int j=0;j<WellHeight;++j){
 	Dot d={i,j};
-	_wellWin.DrawDot(d,w(d));
+	_wellWin.DrawDot(d,_colors[j*WellWidth+i]);
       }
     
-    BOOST_FOREACH(const Dot &d, fb.GetMatrix())
-      _wellWin.DrawDot(d,fb.GetColor());
+    BOOST_FOREACH(const Dot &d, p.GetDots(b))
+      _wellWin.DrawDot(d,GetColor(b));
 
     wrefresh(_wellWin);
   }
 
-  void Ui::RedrawNext(BlockType next){
+  void Ui::RedrawNext(BlockType b){
     wmove((WINDOW*)_nextWin,1,0);
     wclrtobot((WINDOW*)_nextWin);
     
-    BOOST_FOREACH(const Dot &d, GetDots(next,(Dot){2,2},Orientation()))
-      _nextWin.DrawDot(d,GetColor(next));
+    BlockPosition p((Dot){2,2});
+    BOOST_FOREACH(const Dot &d, p.GetDots(b))
+      _nextWin.DrawDot(d,GetColor(b));
     wrefresh(_nextWin);
     return;
   }
@@ -436,13 +450,15 @@ namespace Bastet{
   void Ui::Play(){
     _points=0;
     _lines=0;
+    _colors.assign(0);
     RedrawStatic();
     RedrawScore();
     Well w;
     BlockType current;
     BlockType next;
     nodelay(stdscr,TRUE);
-    BastetBlockChooser bc;
+    //    BastetBlockChooser bc;
+    RandomBlockChooser bc; //DBG
     StartingSet ss=bc.ChooseStartingSet();
     current=ss.first;
     next=ss.second;
@@ -450,7 +466,7 @@ namespace Bastet{
       while(true){
 	while(getch()!=ERR); //ignores the keys pressed during the next block calculation
 	RedrawNext(next);
-	DropBlock(w,current);
+	DropBlock(current,&w);
 	current=next;
 	next=bc.Choose(&w,current);
       }

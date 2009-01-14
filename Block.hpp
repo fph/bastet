@@ -89,8 +89,7 @@ namespace Bastet{
     /**
      * returns an array of 4 (x,y) pair for the occupied dots
      */
-    DotMatrix GetDots(Dot position, Orientation orientation) const
-    {return position+_matrix[orientation];}
+    const OrientationMatrix &GetOrientationMatrix(){return _matrix;}
     Color GetColor() const {return _color;};
   };
 
@@ -98,7 +97,7 @@ namespace Bastet{
   extern BlockArray blocks;
 
   //should be members, but BlockType is an enum...
-  const DotMatrix GetDots(BlockType b, Dot position, Orientation o);
+  //  const DotMatrix GetDots(BlockType b, Dot position, Orientation o);
   const Color GetColor(BlockType b);
 
 }

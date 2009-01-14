@@ -2,18 +2,17 @@
 #define WELL_HPP
 
 #include "Block.hpp" //for Color
-#include "FallingBlock.hpp"
+#include "BlockPosition.hpp"
 #include <cstddef> //size_t
 #include <vector>
 #include <bitset>
+#include <boost/array.hpp>
 
 namespace Bastet{
-
-  class FallingBlock; //forward
   
   class GameOver{}; //used as an exception
 
-  class WellLine: public boost::array<Color,WellWidth>{
+  class WellLine: public boost::array<bool,WellWidth>{
 
   };
 
@@ -27,13 +26,11 @@ namespace Bastet{
     Well();
     ~Well();
     void Clear();
-    const Color &operator()(const Dot &p) const;
-    Color &operator()(const Dot &p);
     bool Accomodates(const DotMatrix &d) const; //true if the given tetromino fits into the well
     bool IsLineComplete(int y) const;
-    std::vector<int> Lock(const FallingBlock &fb); //permanently adds a tetromino to the well; returns a bitset of 4 bits where return[i]==1 iff line (start of fb)+i is complete
+    std::vector<int> Lock(BlockType t, const BlockPosition &p); //permanently adds a tetromino to the well; returns a bitset of 4 bits where return[i]==1 iff line (start of fb)+i is complete
     void ClearLines(const std::vector<int> &completed); //removes the given lines from the well (whether they are completed or not)
-    int LockAndClearLines(const FallingBlock &fb); //locks, clear lines, returns number of lines cleared
+    int LockAndClearLines(BlockType t, const BlockPosition &p); //locks, clear lines, returns number of lines cleared
   };
 
 }

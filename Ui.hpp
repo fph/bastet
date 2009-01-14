@@ -2,7 +2,7 @@
 #define UI_HPP
 
 #include "Well.hpp"
-#include "FallingBlock.hpp"
+#include "BlockPosition.hpp"
 
 #include <string>
 #include <curses.h>
@@ -40,11 +40,11 @@ namespace Bastet{
     int KeyDialog(const std::string &message); //asks for a single key
     int MenuDialog(const std::vector<std::string> &choices); //asks to choose one, returns index
     void RedrawStatic(); //redraws the "static" parts of the screen
-    void RedrawWell(const Well &well, const FallingBlock &fb);
+    void RedrawWell(const Well *well, BlockType falling, const BlockPosition &pos);
     void RedrawNext(BlockType next);
     void RedrawScore();
     void CompletedLinesAnimation(const std::vector<int> &completed);
-    void DropBlock(Well &w, BlockType b); //returns <score,lines>
+    void DropBlock(BlockType b, Well *w); //returns <score,lines>
     
     void ChooseLevel();
     void Play();
@@ -59,6 +59,10 @@ namespace Bastet{
     BorderedWindow _wellWin;
     BorderedWindow _nextWin;
     BorderedWindow _scoreWin;
+    /**
+     * this is a kind of "well" structure to store the colors used to draw the blocks.
+     */
+    boost::array<Color,WellWidth*WellHeight> _colors;
   };
 }
 

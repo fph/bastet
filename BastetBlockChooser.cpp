@@ -23,14 +23,14 @@ namespace Bastet{
     //lines
     int score=100000*extralines;
     
-    //sums "free" height of each column (penalizes "holes")
-    for(int i=0;i<WellWidth;++i){
-      Dot d;
-      for(d=(Dot){i,-2}; d.y<WellHeight;d.y++){
-	if((*w)(d)!=0) break;
-      }
-      score+=100*d.y;
-    }
+//     //sums "free" height of each column (penalizes "holes")
+//     for(int i=0;i<WellWidth;++i){
+//       Dot d;
+//       for(d=(Dot){i,-2}; d.y<WellHeight;d.y++){
+// 	if((*w)(d)!=0) break;
+//       }
+//       score+=100*d.y;
+//     }
 
     return score;
   }
@@ -42,7 +42,8 @@ namespace Bastet{
 
   }
 
-  StartingSet BastetBlockChooser::ChooseStartingSet(){
+  Queue BastetBlockChooser::GetStartingQueue(){
+    Queue q;
     //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman).
     BlockType first;
     switch(random()%4){
@@ -55,18 +56,20 @@ namespace Bastet{
     case 3:
       first=T;break;
     }
-    return make_pair(first,BlockType(random()%7));
+    q.push_back(first);
+    q.push_back(BlockType(random()%7));
+    return q;
   }
 
   boost::array<int,7> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
     RecursiveVisitor visitor;
-    Searcher(well,FallingBlock(currentBlock,*well),&visitor);
+    Searcher(currentBlock,well,BlockPosition(),&visitor);
     return visitor.GetScores();
   }
 
 
-  BlockType BastetBlockChooser::Choose(const Well *well, BlockType currentBlock){
-    boost::array<int,7> mainScores=ComputeMainScores(well,currentBlock);
+  BlockType BastetBlockChooser::GetNext(const Well *well, const Queue &q){
+    boost::array<int,7> mainScores=ComputeMainScores(well,q.front());
     boost::array<int,7> finalScores=mainScores;
 
     //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
@@ -93,52 +96,30 @@ namespace Bastet{
     //return BlockType(random()%7);
   }
 
-  Searcher::Searcher(const Well *well, Vertex v, WellVisitor *visitor):_well(well),_visitor(visitor){
+  Searcher::Searcher(BlockType b, const Well *well, Vertex v, WellVisitor *visitor):_block(b),_well(well),_visitor(visitor){
     DFSVisit(v);
   }
 
   void Searcher::DFSVisit(Vertex v){
     if(_visited.insert(v).second==false) return; //already visited
-    
-    //if(_visited.size()>2) return;
 
-    //there is some code replication here, I don't know if it is worth refactoring
-    {
+    for(int i=0;i<5;++i){
       Vertex v2(v);
-      if(v2.MoveDown(*_well))
+      if(v2.MoveIfPossible(Movement(i),_block,_well))
 	DFSVisit(v2);
-      else{ //block may lock here
-	_visitor->Visit(_well,v);
+      else{
+	if(Movement(i)==Down) //block may lock here
+	  _visitor->Visit(_block,_well,v);
       }
-    }
-    {
-      Vertex v2(v);
-      if(v2.MoveLeft(*_well))
-	DFSVisit(v2);
-    }
-    {
-      Vertex v2(v);
-      if(v2.MoveRight(*_well))
-	DFSVisit(v2);
-    }
-    {
-      Vertex v2(v);
-      if(v2.RotateCW(*_well))
-	DFSVisit(v2);
-    }
-    {
-      Vertex v2(v);
-      if(v2.RotateCCW(*_well))
-	DFSVisit(v2);
     }
   }
 
   BestScoreVisitor::BestScoreVisitor(int bonusLines):_score(GameOverScore),_bonusLines(bonusLines){};
   BestScoreVisitor::~BestScoreVisitor(){};
-  void BestScoreVisitor::Visit(const Well *w, Vertex v){
+  void BestScoreVisitor::Visit(BlockType b, const Well *w, Vertex v){
     Well w2(*w); //copy
     try{
-      int linescleared=w2.LockAndClearLines(v);
+      int linescleared=w2.LockAndClearLines(b,v);
       int thisscore=Evaluate(&w2,linescleared+_bonusLines);
       _score=max(_score,thisscore);
     }catch(const GameOver &go){}
@@ -146,17 +127,18 @@ namespace Bastet{
 
   RecursiveVisitor::RecursiveVisitor(){_scores.assign(GameOverScore);}
   RecursiveVisitor::~RecursiveVisitor(){}
-  void RecursiveVisitor::Visit(const Well *w, Vertex v){
+  void RecursiveVisitor::Visit(BlockType b, const Well *w, Vertex v){
     Well w2(*w); //copy
     try{
-      int linescleared=w2.LockAndClearLines(v);
+      int linescleared=w2.LockAndClearLines(b,v); //may throw GO
       for(int i=0;i<7;++i){
 	try{
-	  FallingBlock fb(BlockType(i),w2);
 	  BestScoreVisitor visitor(linescleared);
-	  Searcher searcher(&w2,fb,&visitor);
+	  BlockPosition p;
+	  if(!p.IsValid(BlockType(i),&w2)) throw(GameOver());
+	  Searcher searcher(BlockType(i),&w2,p,&visitor);
 	  _scores[i]=max(_scores[i],visitor.GetScore());
-	} catch(const GameOver &go){} //catches the one thrown by FB constructor
+	} catch(const GameOver &go){}
       }
     } catch(const GameOver &go){} //catches the exception which might be thrown by LockAndClearLines
   }

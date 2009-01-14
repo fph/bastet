@@ -29,7 +29,7 @@ namespace Bastet{
     }
   }
 
-  bool BlockPosition::MoveIfPossible(Movement m, BlockType b, Well *w){
+  bool BlockPosition::MoveIfPossible(Movement m, BlockType b, const Well *w){
     BlockPosition p(*this);
     p.Move(m);
     if (p.IsValid(b,w)){
@@ -40,11 +40,11 @@ namespace Bastet{
   }
 
   
-  bool BlockPosition::IsValid(BlockType bt, Well *w) const{
+  bool BlockPosition::IsValid(BlockType bt, const Well *w) const{
     return w->Accomodates(GetDots(bt)); //XX: must change, unoptimized
   }
 
-  void BlockPosition::Drop(BlockType bt, Well *w){
+  void BlockPosition::Drop(BlockType bt, const Well *w){
     while(MoveIfPossible(Down,bt,w));
   }
 

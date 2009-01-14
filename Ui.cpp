@@ -1,7 +1,7 @@
 #include "Ui.hpp"
 #include "BlockPosition.hpp"
 #include "Config.hpp"
-//#include "BastetBlockChooser.hpp"
+#include "BastetBlockChooser.hpp"
 #include "BlockChooser.hpp"
 
 #include <cstdio>
@@ -455,8 +455,8 @@ namespace Bastet{
     RedrawScore();
     Well w;
     nodelay(stdscr,TRUE);
-    //    BastetBlockChooser bc;
-    RandomBlockChooser bc; //DBG
+    BastetBlockChooser bc;
+    //RandomBlockChooser bc; //DBG
     Queue q=bc.GetStartingQueue();
     try{
       while(true){

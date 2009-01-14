@@ -1,4 +1,4 @@
-SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp #BastetBlockChooser.cpp
+SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp BastetBlockChooser.cpp
 PROGNAME=bastet
 LDFLAGS+=-lncurses
 CXXFLAGS+=-ggdb -Wall

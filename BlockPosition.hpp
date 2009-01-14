@@ -17,13 +17,16 @@ namespace Bastet{
     Orientation _orientation;
   public:
     BlockPosition(Dot d=(Dot){3,-2}, Orientation o=Orientation()):_pos(d),_orientation(o){};
+    bool operator==(const BlockPosition &p) const{
+      return _pos==p._pos && _orientation==p._orientation;
+    }
     void Move(Movement m);
-    bool MoveIfPossible(Movement m, BlockType b, Well *w);
+    bool MoveIfPossible(Movement m, BlockType b, const Well *w);
 
-    void Drop(BlockType bt, Well *w);
+    void Drop(BlockType bt, const Well *w);
 
     const DotMatrix GetDots(BlockType b) const;
-    bool IsValid(BlockType bt, Well *w) const;
+    bool IsValid(BlockType bt, const Well *w) const;
     bool IsOutOfScreen(BlockType bt) const;
 
   friend size_t hash_value(const BlockPosition &p){

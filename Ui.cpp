@@ -454,21 +454,18 @@ namespace Bastet{
     RedrawStatic();
     RedrawScore();
     Well w;
-    BlockType current;
-    BlockType next;
     nodelay(stdscr,TRUE);
     //    BastetBlockChooser bc;
     RandomBlockChooser bc; //DBG
-    StartingSet ss=bc.ChooseStartingSet();
-    current=ss.first;
-    next=ss.second;
+    Queue q=bc.GetStartingQueue();
     try{
       while(true){
 	while(getch()!=ERR); //ignores the keys pressed during the next block calculation
-	RedrawNext(next);
+	BlockType current=q.front();
+	q.pop_front();
+	if(!q.empty()) RedrawNext(q.front());
 	DropBlock(current,&w);
-	current=next;
-	next=bc.Choose(&w,current);
+	q.push_back(bc.GetNext(&w,q));
       }
     } catch(GameOver &go){
 

@@ -9,10 +9,13 @@ namespace Bastet{
 
   RandomBlockChooser::RandomBlockChooser(){}
   RandomBlockChooser::~RandomBlockChooser(){}
-  StartingSet RandomBlockChooser::ChooseStartingSet(){
-    return std::make_pair(BlockType(random()%7),BlockType(random()%7));
+  Queue RandomBlockChooser::GetStartingQueue(){
+    Queue q;
+    q.push_back(BlockType(random()%7));
+    q.push_back(BlockType(random()%7));
+    return q;
   }
-  BlockType RandomBlockChooser::Choose(const Well *well, BlockType next){
+  BlockType RandomBlockChooser::GetNext(const Well *well, const Queue &q){
     return BlockType(random()%7);
   }
   

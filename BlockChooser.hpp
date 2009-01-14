@@ -2,19 +2,20 @@
 #define BLOCKCHOOSER_HPP
 
 #include "Block.hpp"
-#include <utility>
+#include <deque>
 
 namespace Bastet{
 
   class Well;
-  typedef std::pair<BlockType,BlockType> StartingSet;
+  //queue of blocks to appear on the screen
+  typedef std::deque<BlockType> Queue;
 
   class BlockChooser{
   public:
     BlockChooser();
     virtual ~BlockChooser();
-    virtual StartingSet ChooseStartingSet()=0; //chooses first and second block
-    virtual BlockType Choose(const Well *well, BlockType current)=0; //chooses next block
+    virtual Queue GetStartingQueue()=0; //chooses first blocks
+    virtual BlockType GetNext(const Well *well, const Queue &q)=0; //chooses next block
   private:
   };
 
@@ -23,8 +24,8 @@ namespace Bastet{
   public:
     RandomBlockChooser();
     virtual ~RandomBlockChooser();
-    virtual StartingSet ChooseStartingSet(); //chooses first and second block
-    virtual BlockType Choose(const Well *well, BlockType current); //chooses next block    
+    virtual Queue GetStartingQueue();
+    virtual BlockType GetNext(const Well *well, const Queue &q);
   private:
   };
 

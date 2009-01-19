@@ -48,6 +48,8 @@ namespace Bastet{
    ~Config();
     Keys *GetKeys();
     HighScores *GetHighScores();
+    std::string GetConfigFileName() const;
+    std::string GetHighScoresFileName() const;
   };
 
   extern Config config; //singleton

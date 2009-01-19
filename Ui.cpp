@@ -465,8 +465,8 @@ namespace Bastet{
     RedrawScore();
     Well w;
     nodelay(stdscr,TRUE);
-    //BastetBlockChooser bc;
-    RandomBlockChooser bc; //DBG
+    BastetBlockChooser bc;
+    //RandomBlockChooser bc; //DBG
     Queue q=bc.GetStartingQueue();
     try{
       while(true){

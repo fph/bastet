@@ -1,0 +1,13 @@
+"make" creates an executable file called "bastet", that's all you need to run the program. 
+Optionally, for system-wide high scores, you may want to create an empty "/var/games/bastet.scores2" file, and make sure that is writable to the bastet executable.
+
+Simplest way to create system-wide high scores under any Linux distro that has a "games" groups:
+
+cd the-directory-in-which-you-found-this-file
+make
+cp bastet /usr/local/bin
+chgrp games /usr/local/bin/bastet
+chmod g+s /usr/local/bin/bastet
+touch /var/games/bastet.scores2
+chgrp games /var/games/bastet.scores2
+chmod 664 /var/games/bastet.scores2

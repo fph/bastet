@@ -20,6 +20,8 @@ namespace Bastet{
     bool operator==(const BlockPosition &p) const{
       return _pos==p._pos && _orientation==p._orientation;
     }
+    ///returns an y such that the block lies completely in [y,y+3]
+    int GetBaseY() const{return _pos.y;}
     void Move(Movement m);
     bool MoveIfPossible(Movement m, BlockType b, const Well *w);
 

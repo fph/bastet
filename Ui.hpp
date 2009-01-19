@@ -43,7 +43,7 @@ namespace Bastet{
     void RedrawWell(const Well *well, BlockType falling, const BlockPosition &pos);
     void RedrawNext(BlockType next);
     void RedrawScore();
-    void CompletedLinesAnimation(const std::vector<int> &completed);
+    void CompletedLinesAnimation(const LinesCompleted &completed);
     void DropBlock(BlockType b, Well *w); //returns <score,lines>
     
     void ChooseLevel();
@@ -62,7 +62,9 @@ namespace Bastet{
     /**
      * this is a kind of "well" structure to store the colors used to draw the blocks.
      */
-    boost::array<Color,WellWidth*WellHeight> _colors;
+    typedef boost::array<Color,WellWidth> ColorWellLine; 
+    typedef boost::array<ColorWellLine,RealWellHeight> ColorWell;
+    ColorWell _colors;
   };
 }
 

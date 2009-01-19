@@ -141,7 +141,8 @@ namespace Bastet{
 				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
 				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
-    _colors.assign(0);
+    BOOST_FOREACH(ColorWellLine &a, _colors)
+      a.assign(0);
   }
 
   Dot BoundingRect(const std::string &message){ //returns x and y of the minimal rectangle containing the given string
@@ -366,23 +367,29 @@ namespace Bastet{
       RedrawWell(w,b,p);
     } //while(1) 
 
-    std::vector<int> v=w->Lock(b,p);
+    LinesCompleted lc=w->Lock(b,p);
     //locks also into _colors
     BOOST_FOREACH(const Dot &d, p.GetDots(b))
       if(d.y>=0)
-	_colors[d.y*WellWidth+d.x]=GetColor(b);
+	_colors[d.y+2][d.x]=GetColor(b);
 
     RedrawWell(w,b,p);
-    if(!v.empty()){
-      CompletedLinesAnimation(v);
-      w->ClearLines(v);
-
-      if(( (_lines+v.size())/10 - _lines/10 !=0) && _level<9){
+    if(lc._completed.any()){
+      CompletedLinesAnimation(lc);
+      w->ClearLines(lc);
+      //clears also _colors
+      ColorWell::reverse_iterator it=lc.Clear(_colors.rbegin(),_colors.rend());
+      for(;it!=_colors.rend();++it){
+	it->assign(0);
+      }
+      
+      int newlines=lc._completed.count();
+      if(( (_lines+newlines)/10 - _lines/10 !=0) && _level<9){
 	_level++;
       }
 
-      _lines+=v.size();
-      switch(v.size()){
+      _lines+=newlines;
+      switch(newlines){
       case 1:
 	_points+=100;
 	break;
@@ -404,7 +411,7 @@ namespace Bastet{
     for(int i=0;i<WellWidth;++i)
       for(int j=0;j<WellHeight;++j){
 	Dot d={i,j};
-	_wellWin.DrawDot(d,_colors[j*WellWidth+i]);
+	_wellWin.DrawDot(d,_colors[j+2][i]);
       }
     
     BOOST_FOREACH(const Dot &d, p.GetDots(b))
@@ -435,28 +442,31 @@ namespace Bastet{
     return;
   }
 
-  void Ui::CompletedLinesAnimation(const std::vector<int> &completed){
+  void Ui::CompletedLinesAnimation(const LinesCompleted &completed){
     wattrset((WINDOW*)_wellWin,COLOR_PAIR(22));
     for(int i=0;i<6;++i){
-      BOOST_FOREACH(int k, completed){
-	wmove(_wellWin,k,0);
-	whline(_wellWin, i%2?' ':':',WellWidth*2);
+      for(int k=0;k<3;++k){
+	if(completed._completed[k]){
+	  wmove(_wellWin,completed._baseY+k,0);
+	  whline(_wellWin, i%2?' ':':',WellWidth*2);
+	}
+	wrefresh(_wellWin);
+	usleep(500000/6);
       }
-      wrefresh(_wellWin);
-      usleep(500000/6);
     }
   }
 
   void Ui::Play(){
     _points=0;
     _lines=0;
-    _colors.assign(0);
+    BOOST_FOREACH(ColorWellLine &a, _colors)
+      a.assign(0);
     RedrawStatic();
     RedrawScore();
     Well w;
     nodelay(stdscr,TRUE);
-    BastetBlockChooser bc;
-    //RandomBlockChooser bc; //DBG
+    //BastetBlockChooser bc;
+    RandomBlockChooser bc; //DBG
     Queue q=bc.GetStartingQueue();
     try{
       while(true){

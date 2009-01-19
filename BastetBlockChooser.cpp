@@ -22,16 +22,14 @@ namespace Bastet{
     //high=good for player
     //lines
     int score=100000*extralines;
-    
-//     //sums "free" height of each column (penalizes "holes")
-//     for(int i=0;i<WellWidth;++i){
-//       Dot d;
-//       for(d=(Dot){i,-2}; d.y<WellHeight;d.y++){
-// 	if((*w)(d)!=0) break;
-//       }
-//       score+=100*d.y;
-//     }
 
+    //sums "free" height of each column (penalizes "holes")
+    std::bitset<WellWidth> occupied;
+    occupied.reset();
+    BOOST_FOREACH(WellLine l,w->_well){
+      occupied = occupied & l;
+      score+=(WellWidth-occupied.count());
+    }
     return score;
   }
 

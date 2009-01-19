@@ -15,7 +15,7 @@ namespace Bastet{
   
   class GameOver{}; //used as an exception
 
-  class WellLine: public boost::array<bool,WellWidth>{
+  class WellLine: public std::bitset<WellWidth>{
 
   };
 

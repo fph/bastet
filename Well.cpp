@@ -13,9 +13,7 @@ namespace Bastet{
 
   void Well::Clear(){
     BOOST_FOREACH(WellLine &l, _well){
-      BOOST_FOREACH(bool &b, l){
-	b=false;
-      }
+      l.reset();
     }
   }
 
@@ -53,7 +51,7 @@ namespace Bastet{
   void Well::ClearLines(const LinesCompleted &completed){
     WellType::reverse_iterator it=completed.Clear(_well.rbegin(),_well.rend());
     for(;it!=_well.rend();++it){
-      it->assign(0);
+      it->reset();
     }
   }
 

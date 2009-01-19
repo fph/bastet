@@ -445,7 +445,7 @@ namespace Bastet{
   void Ui::CompletedLinesAnimation(const LinesCompleted &completed){
     wattrset((WINDOW*)_wellWin,COLOR_PAIR(22));
     for(int i=0;i<6;++i){
-      for(int k=0;k<3;++k){
+      for(int k=0;k<4;++k){
 	if(completed._completed[k]){
 	  wmove(_wellWin,completed._baseY+k,0);
 	  whline(_wellWin, i%2?' ':':',WellWidth*2);

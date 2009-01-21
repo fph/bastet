@@ -78,6 +78,13 @@ namespace Bastet{
       return s;
     }
     ofs2.close();
+    //tries to create local high scores
+    ofstream ofs3(s.c_str());
+    if(!ofs3.fail()){
+      cerr<<boost::str(boost::format("Using local high scores file %1%, global one %2% is not writable\n") % s % GlobalHighScoresFileName);
+      cerr<<boost::str(boost::format("Creating new local high scores file %1%\n") % s);
+      return s;
+    }
     throw(CannotOpenFile());
   }
 

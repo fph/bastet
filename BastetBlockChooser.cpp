@@ -45,7 +45,7 @@ namespace Bastet{
     occupied.reset();
     BOOST_FOREACH(WellLine l,w->_well){
       occupied = occupied & l;
-      score+=(WellWidth-occupied.count());
+      score+=32*(WellWidth-occupied.count());
     }
     return score;
   }

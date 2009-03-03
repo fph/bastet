@@ -117,6 +117,7 @@ namespace Bastet{
   //should be members, but BlockType is an enum...
   //  const DotMatrix GetDots(BlockType b, Dot position, Orientation o);
   const Color GetColor(BlockType b);
+  const char GetChar(BlockType b);
 
 }
 

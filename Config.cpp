@@ -63,29 +63,41 @@ namespace Bastet{
   class CannotOpenFile{};
 
   std::string Config::GetHighScoresFileName() const{
-    //tries global first and sees if it's writable
+    static std::string result; //gets cached
+    if(!result.empty()) return result;
+    
+    //tries the global one first and sees if it's writable
     fstream ofs(GlobalHighScoresFileName.c_str());
     if(!ofs.fail()){
-      ofs.close();
-      return GlobalHighScoresFileName;
+      result=GlobalHighScoresFileName;
     }
     ofs.close();
+
+    //falls back to the user-specific file
     string s=string(getenv("HOME"))+LocalHighScoresFileName;
-    fstream ofs2(s.c_str());
-    if(!ofs2.fail()){
-      cerr<<boost::str(boost::format("Using local high scores file %1%, global one %2% is not writable\n") % s % GlobalHighScoresFileName);
+    cerr<<boost::str(boost::format("bastet: using a user-specific high scores file: %1%\nas the global high scores file %2% is not writable\n") % s % GlobalHighScoresFileName);
+
+    if(result.empty()){
+      fstream ofs2(s.c_str());
+      if(!ofs2.fail()){
+
+	result=s;
+      }
       ofs2.close();
-      return s;
     }
-    ofs2.close();
-    //tries to create local high scores
-    ofstream ofs3(s.c_str());
-    if(!ofs3.fail()){
-      cerr<<boost::str(boost::format("Using local high scores file %1%, global one %2% is not writable\n") % s % GlobalHighScoresFileName);
-      cerr<<boost::str(boost::format("Creating new local high scores file %1%\n") % s);
-      return s;
+    
+    //tries to create the local high scores
+    if(result.empty()){
+      ofstream ofs3(s.c_str());
+      if(!ofs3.fail()){
+	cerr<<boost::str(boost::format("bastet: creating a new user-specific high scores file %1%\n") % s);
+	result=s;
+      }
+      ofs3.close();
     }
-    throw(CannotOpenFile());
+    if(result.empty())
+      throw(CannotOpenFile());
+    else return result;
   }
 
   Config::Config(){
@@ -125,7 +137,6 @@ namespace Bastet{
     _keys.Pause=_options["Pause"].as<int>();
 
     string s=GetHighScoresFileName();
-    cerr<<"High scores file: "<<s<<"\n";
     ifstream ifs2(s.c_str());
     po::store(po::parse_config_file(ifs2,highScoresOpts),_highScores);
 

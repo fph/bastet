@@ -21,6 +21,7 @@
 
 #include "Well.hpp"
 #include "BlockPosition.hpp"
+#include "BlockChooser.hpp"
 
 #include <string>
 #include <curses.h>
@@ -65,7 +66,7 @@ namespace Bastet{
     void DropBlock(BlockType b, Well *w); //returns <score,lines>
     
     void ChooseLevel();
-    void Play();
+    void Play(BlockChooser *bc);
     void HandleHighScores(); ///if needed, asks name for highscores
     void ShowHighScores();
     void CustomizeKeys();

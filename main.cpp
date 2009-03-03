@@ -18,6 +18,7 @@
 
 #include "Ui.hpp"
 #include "Config.hpp"
+#include "BastetBlockChooser.hpp"
 #include <boost/assign.hpp>
 
 //DBG
@@ -34,21 +35,31 @@ int main(int argc, char **argv){
   Ui ui;
   while(1){
     
-    int choice=ui.MenuDialog(list_of("Play!")("View highscores")("Customize keys")("Quit"));
+    int choice=ui.MenuDialog(list_of("Play! (normal version)")("Play! (harder version)")("View highscores")("Customize keys")("Quit"));
     switch(choice){
-    case 0:
+    case 0:{
       ui.ChooseLevel();
-      ui.Play();
+      BastetBlockChooser bc;
+      ui.Play(&bc);
       ui.HandleHighScores();
       ui.ShowHighScores();
+    }
       break;
-    case 1:
+    case 1:{
+      ui.ChooseLevel();
+      NoPreviewBlockChooser bc;
+      ui.Play(&bc);
+      ui.HandleHighScores();
       ui.ShowHighScores();
+    }
       break;
     case 2:
-      ui.CustomizeKeys();
+      ui.ShowHighScores();
       break;
     case 3:
+      ui.CustomizeKeys();
+      break;
+    case 4:
       exit(0);
       break;
     }

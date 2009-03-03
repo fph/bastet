@@ -474,7 +474,7 @@ namespace Bastet{
     }
   }
 
-  void Ui::Play(){
+  void Ui::Play(BlockChooser *bc){
     _points=0;
     _lines=0;
     BOOST_FOREACH(ColorWellLine &a, _colors)
@@ -483,9 +483,7 @@ namespace Bastet{
     RedrawScore();
     Well w;
     nodelay(stdscr,TRUE);
-    BastetBlockChooser bc;
-    //RandomBlockChooser bc; //DBG
-    Queue q=bc.GetStartingQueue();
+    Queue q=bc->GetStartingQueue();
     try{
       while(true){
 	while(getch()!=ERR); //ignores the keys pressed during the next block calculation
@@ -493,7 +491,7 @@ namespace Bastet{
 	q.pop_front();
 	if(!q.empty()) RedrawNext(q.front());
 	DropBlock(current,&w);
-	q.push_back(bc.GetNext(&w,q));
+	q.push_back(bc->GetNext(&w,q));
       }
     } catch(GameOver &go){
 

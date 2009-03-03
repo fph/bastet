@@ -35,18 +35,26 @@ using namespace std;
 using namespace boost;
 
 namespace Bastet{
-  int Evaluate(const Well *w, int extralines){
-    //high=good for player
+  long Evaluate(const Well *w, int extralines){
+    //high=good for the player
     //lines
-    int score=100000*extralines;
+    long score=pow(10,8)*extralines;
 
-    //sums "free" height of each column (penalizes "holes")
+    //adds a bonus for each "free" dot above the occupied blocks profile
     std::bitset<WellWidth> occupied;
     occupied.reset();
     BOOST_FOREACH(WellLine l,w->_well){
       occupied = occupied & l;
-      score+=32*(WellWidth-occupied.count());
+      score+=pow(10,4)*(WellWidth-occupied.count());
     }
+
+    //adds a bonus for lower max height of the occupied blocks
+    int height=RealWellHeight;
+    BOOST_FOREACH(WellLine l, w->_well){
+      if(l.any()) break;
+      height--;
+    }
+    score+= pow(10,3) * (RealWellHeight-height);
     return score;
   }
 
@@ -76,7 +84,7 @@ namespace Bastet{
     return q;
   }
 
-  boost::array<int,7> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
+  boost::array<long,7> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
     RecursiveVisitor visitor;
     Searcher(currentBlock,well,BlockPosition(),&visitor);
     return visitor.GetScores();
@@ -84,26 +92,32 @@ namespace Bastet{
 
 
   BlockType BastetBlockChooser::GetNext(const Well *well, const Queue &q){
-    boost::array<int,7> mainScores=ComputeMainScores(well,q.front());
-    boost::array<int,7> finalScores=mainScores;
-
-    //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
-
-    //old "stupid" algorithm -- TODO: something more elaborate would be advisable
+    boost::array<long,7> mainScores=ComputeMainScores(well,q.front());
+    boost::array<long,7> finalScores=mainScores;
 
     //perturbes scores to randomize tie handling
-    BOOST_FOREACH(int &i, finalScores)
-      i+=(random()%32);
+    BOOST_FOREACH(long &i, finalScores)
+      i+=(random()%100);
+
+    //prints the final scores, for debugging convenience
+    for(int i=0;i<7;++i){
+      //mvprintw(i,1,"%c: %d",GetChar(BlockType(i)),finalScores[i]);
+    }
+
+    //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
     
-    //finds which block we want
-    static const boost::array<int,7> blockPercentages={{75, 92, 98, 100, 100, 100, 100}};
+    boost::array<long,7> temp(finalScores);
+    sort(temp.begin(),temp.end());
+
+    //always returns the worst block if it's different from the last one
+    int worstblock=find(finalScores.begin(),finalScores.end(),temp[0])-finalScores.begin();
+    if(BlockType(worstblock) != q.front()) return BlockType(worstblock);
+    
+    //otherwise, returns the pos-th block, where pos is random
+    static const boost::array<int,7> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
     int pos=find_if(blockPercentages.begin(),blockPercentages.end(),bind2nd(greater_equal<int>(),random()%100)) - blockPercentages.begin();
     assert(pos>=0 && pos<7);
 
-    //finds index of the pos-th element (in increasing order) of the vector
-    //dumb algorithm, always returns the first in case of ties, but we don't care because of the randomization
-    boost::array<int,7> temp(finalScores);
-    nth_element(temp.begin(),temp.begin()+pos,temp.end());
     int chosenBlock=find(finalScores.begin(),finalScores.end(),temp[pos])-finalScores.begin();
     return BlockType(chosenBlock);
     
@@ -135,7 +149,7 @@ namespace Bastet{
     Well w2(*w); //copy
     try{
       int linescleared=w2.LockAndClearLines(b,v);
-      int thisscore=Evaluate(&w2,linescleared+_bonusLines);
+      long thisscore=Evaluate(&w2,linescleared+_bonusLines);
       _score=max(_score,thisscore);
     }catch(const GameOver &go){}
   }
@@ -156,6 +170,53 @@ namespace Bastet{
 	} catch(const GameOver &go){}
       }
     } catch(const GameOver &go){} //catches the exception which might be thrown by LockAndClearLines
+  }
+
+  NoPreviewBlockChooser::NoPreviewBlockChooser(){};
+  NoPreviewBlockChooser::~NoPreviewBlockChooser(){};
+  Queue NoPreviewBlockChooser::GetStartingQueue(){
+    Queue q;
+    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman).
+    BlockType first;
+    switch(random()%4){
+    case 0:
+      first=I;break;
+    case 1:
+      first=J;break;
+    case 2:
+      first=L;break;
+    case 3:
+      first=T;break;
+    }
+    q.push_back(first);
+    return q;
+  }
+
+  BlockType NoPreviewBlockChooser::GetNext(const Well *well, const Queue &q){
+    assert(q.empty());
+    boost::array<long,7> finalScores;
+    for(int t=0;t<7;++t){
+      BestScoreVisitor v;
+      Searcher searcher(BlockType(t),well,BlockPosition(),&v);
+      finalScores[t]=v.GetScore();
+    }
+
+    //perturbes scores to randomize tie handling
+    BOOST_FOREACH(long &i, finalScores)
+      i+=(random()%100);
+
+    //sorts
+    boost::array<long,7> temp(finalScores);
+    sort(temp.begin(),temp.end());
+
+    //returns the pos-th block, where pos is random
+    static const boost::array<int,7> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
+    int pos=find_if(blockPercentages.begin(),blockPercentages.end(),bind2nd(greater_equal<int>(),random()%100)) - blockPercentages.begin();
+    assert(pos>=0 && pos<7);
+
+    int chosenBlock=find(finalScores.begin(),finalScores.end(),temp[pos])-finalScores.begin();
+    return BlockType(chosenBlock);
+
   }
 
 }

@@ -39,11 +39,12 @@ namespace std{namespace tr1{
 
 namespace Bastet{
 
-  static const int GameOverScore=-1000; //bogus score assigned to combinations which cause game over
-  int Evaluate(const Well *w, int extralines); //assigns a score to a position w + a number of extra lines deleted while getting there
+  static const long GameOverScore=-1000; //bogus score assigned to combinations which cause game over
+  long Evaluate(const Well *w, int extralines); //assigns a score to a position w + a number of extra lines deleted while getting there
 
   typedef BlockPosition Vertex;
 
+  //generic visitor that "does something" with a possible drop position
   class WellVisitor{
   public:
     WellVisitor(){}
@@ -51,25 +52,27 @@ namespace Bastet{
     virtual ~WellVisitor(){};
   };
 
+  //for each block type, drops it (via a BestScoreVisitor) and sees which block reaches the best score along the drop positions
   class RecursiveVisitor: public WellVisitor{
   public:
     RecursiveVisitor();
     virtual ~RecursiveVisitor();
     virtual void Visit(BlockType b, const Well *well, Vertex v);
-    const boost::array<int,7> &GetScores() const{return _scores;}
+    const boost::array<long,7> &GetScores() const{return _scores;}
   private:
-    typedef boost::array<int,7> ScoresList;
+    typedef boost::array<long,7> ScoresList;
     ScoresList _scores;
   };
 
+  //returns the max score over all drop positions
   class BestScoreVisitor: public WellVisitor{
   public:
-    explicit BestScoreVisitor(int bonusLines);
+    explicit BestScoreVisitor(int bonusLines=0);
     virtual ~BestScoreVisitor();
     virtual void Visit(BlockType b, const Well *well, Vertex v);
-    int GetScore(){return _score;}
+    long GetScore() const{return _score;}
   private:
-    int _score;
+    long _score;
     int _bonusLines;
   };
 
@@ -91,16 +94,25 @@ namespace Bastet{
   class BastetBlockChooser: public BlockChooser{
   public:
     BastetBlockChooser();
-    ~BastetBlockChooser();
+    virtual ~BastetBlockChooser();
     virtual Queue GetStartingQueue();
     virtual BlockType GetNext(const Well *well, const Queue &q);
     /**
      * computes "scores" of the candidate next blocks by dropping them in all possible positions and choosing the one that has the least max_(drop positions) Evaluate(well)
      */
-    boost::array<int,7> ComputeMainScores(const Well *well, BlockType currentBlock);
-
+    boost::array<long,7> ComputeMainScores(const Well *well, BlockType currentBlock);
+    
   private:
     
+  };
+
+  //block chooser similar to the older bastet versions, does not give a block preview
+  class NoPreviewBlockChooser:public BlockChooser{
+  public:
+    NoPreviewBlockChooser();
+    virtual ~NoPreviewBlockChooser();
+    virtual Queue GetStartingQueue();
+    virtual BlockType GetNext(const Well *well, const Queue &q);
   };
 
 }

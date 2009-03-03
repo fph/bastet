@@ -1,0 +1,50 @@
+.TH BASTET 6 "FEBRUARY 2009"
+.SH NAME
+bastet \- Tetris(r) clone with "bastard" block-choosing AI
+.SH SYNOPSIS
+.B bastet
+.SH DESCRIPTION
+.B bastet
+(short for "bastard tetris") is a Tetris(r) clone which tries to
+give you the worst possible block. Playing bastet can be
+a painful experience, especially if you usually make "canyons" and wait for
+the long I-shaped block.
+.SH USAGE
+.B bastet
+tries to conform as much as possible to the tetris guidelines. We refer to those for the rules of the game. In the starting menu, you can configure the key bindings; the default ones are:
+.IP DOWN
+moves the tetromino down (one single step)
+.IP LEFT
+moves the tetromino left
+.IP RIGHT
+moves the tetromino right
+.IP SPACE
+rotates CW
+.IP UP
+rotates CCW
+.IP ENTER
+drops the tetromino as far down as possible (hard drop)
+.IP P
+pauses the game
+.IP CTRL+C
+exits the game without any further prompt
+
+.SH PLAYING MODES
+The game includes two playing modes. In the second one (harder), you do not get the preview of the next tetromino, and the algorithm is modified to take advantage of this. Currently, there is no separate high scores list for the hard mode.
+
+.SH FILES
+.I $(HOME)/.bastetrc
+User options
+
+.I $(HOME)/.bastetscores
+User-specific high scores file (used only if the system high scores file is unavailable)
+
+.I /var/games/bastet.scores
+System-wide high scores for bastet.
+
+.SH OPTIONS
+None.
+.SH BUGS
+Many.
+.SH AUTHOR
+Federico Poloni <fph@ngi.it>

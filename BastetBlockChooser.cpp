@@ -38,14 +38,14 @@ namespace Bastet{
   long Evaluate(const Well *w, int extralines){
     //high=good for the player
     //lines
-    long score=pow(10,8)*extralines;
+    long score=100000000*extralines;
 
     //adds a bonus for each "free" dot above the occupied blocks profile
     std::bitset<WellWidth> occupied;
     occupied.reset();
     BOOST_FOREACH(WellLine l,w->_well){
       occupied = occupied & l;
-      score+=pow(10,4)*(WellWidth-occupied.count());
+      score+=10000*(WellWidth-occupied.count());
     }
 
     //adds a bonus for lower max height of the occupied blocks
@@ -54,7 +54,7 @@ namespace Bastet{
       if(l.any()) break;
       height--;
     }
-    score+= pow(10,3) * (RealWellHeight-height);
+    score+= 1000 * (RealWellHeight-height);
     return score;
   }
 

@@ -1,3 +1,6 @@
+==Prerequisites==
+Boost (libboost-dev), ncurses (libncurses-dev).
+
 "make" creates an executable file called "bastet", that's all you need to run the program. 
 Optionally, for system-wide high scores, you may want to create an empty "/var/games/bastet.scores2" file, and make sure that is writable to the bastet executable.
 

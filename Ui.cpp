@@ -155,9 +155,10 @@ namespace Bastet{
   }
 
   Ui::Ui():
-				_wellWin(WellHeight,2*WellWidth),
-				_nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
-				_scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
+    _level(0),
+    _wellWin(WellHeight,2*WellWidth),
+    _nextWin(5,14,_wellWin.GetMinY(),_wellWin.GetMaxX()+1),
+    _scoreWin(7,14,_nextWin.GetMaxY(),_nextWin.GetMinX())
   {
     BOOST_FOREACH(ColorWellLine &a, _colors)
       a.assign(0);
@@ -274,7 +275,6 @@ namespace Bastet{
   
   void Ui::ChooseLevel(){
     RedrawStatic();
-    _level=0;
     int ch='0';
     format fmt("    Get ready!\n"
 	       " \n"

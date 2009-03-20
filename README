@@ -16,7 +16,7 @@ p	    Pause
 control+C   Quits the game immediately and without asking anything (the current game is lost, but previous games are recorded in the high scores file)
 
 ==Normal/Harder==
-The game currently allows choosing between two block choosers. The second (harder) one does not show you the "next block" preview, thus achieving a higher level of bastardness. Currently there is no separate high scores list for the harder version.
+The game currently allows choosing between two block choosers. The second (harder) one does not show you the "next block" preview, thus achieving a higher level of bastardness.
 
 ==Installation==
 See the INSTALL file in this same directory.

@@ -2,7 +2,7 @@ SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockCho
 PROGNAME=bastet
 LDFLAGS+=-lncurses
 #CXXFLAGS+=-ggdb -Wall
-CXXFLAGS+=-DNDEBUG
+CXXFLAGS+=-DNDEBUG -Wall
 #CXXFLAGS+=-pg
 #LDFLAGS+=-pg
 

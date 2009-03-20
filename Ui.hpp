@@ -60,7 +60,8 @@ namespace Bastet{
     int MenuDialog(const std::vector<std::string> &choices); //asks to choose one, returns index
     void RedrawStatic(); //redraws the "static" parts of the screen
     void RedrawWell(const Well *well, BlockType falling, const BlockPosition &pos);
-    void RedrawNext(BlockType next);
+    void ClearNext(); //clear the next block display
+    void RedrawNext(BlockType next); //redraws the next block display
     void RedrawScore();
     void CompletedLinesAnimation(const LinesCompleted &completed);
     void DropBlock(BlockType b, Well *w); //returns <score,lines>

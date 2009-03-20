@@ -307,7 +307,7 @@ namespace Bastet{
     _scoreWin.RedrawBorder();
 
     wattrset((WINDOW*)_nextWin,COLOR_PAIR(17));
-    mvwprintw(_nextWin,0,0,"Next block:");
+    mvwprintw(_nextWin,0,0," Next block:");
     wrefresh(_nextWin);
 
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(17));
@@ -438,6 +438,12 @@ namespace Bastet{
     wrefresh(_wellWin);
   }
 
+  void Ui::ClearNext(){
+    wmove((WINDOW*)_nextWin,1,0);
+    wclrtobot((WINDOW*)_nextWin);
+    wrefresh(_nextWin);
+  }
+
   void Ui::RedrawNext(BlockType b){
     wmove((WINDOW*)_nextWin,1,0);
     wclrtobot((WINDOW*)_nextWin);
@@ -446,7 +452,6 @@ namespace Bastet{
     BOOST_FOREACH(const Dot &d, p.GetDots(b))
       _nextWin.DrawDot(d,GetColor(b));
     wrefresh(_nextWin);
-    return;
   }
 
   void Ui::RedrawScore(){
@@ -484,6 +489,8 @@ namespace Bastet{
     Well w;
     nodelay(stdscr,TRUE);
     Queue q=bc->GetStartingQueue();
+    if(q.size()==1) //no block preview
+      ClearNext();
     try{
       while(true){
 	while(getch()!=ERR); //ignores the keys pressed during the next block calculation

@@ -1,0 +1,30 @@
+==0.43==
+Complete code rewrite. As I go on trying to grok C++, algorithms and data
+structures, and as I started to understand more of Peter's code, I found 
+it useful to rewrite all this stuff from scratch.
+This should solve some issues and probably introduce new ones. Therefore this
+version needs a lot of playtesting and bug-hunting.
+The algorithm has been split into two, one with the next block preview (normal)
+and one without (harder).
+New and more sophisticated techniques are now used to write the  block-choosing
+algorithms, which should not be fooled as easily as before.
+ 
+==0.41==
+Features a brand-new AI, which should provide a much less boring gameplay
+and avoid some bugs of the previous one. I have not done any work on the 
+interface since my primary goal is having a good algorithm, and not the 
+eye-candy. This new version somehow avoids the endless queues of the same
+block you saw in 0.37: unfortunately, this makes the game a bit easier
+(now you can do five lines with much less effort). If you do not like 
+the thing, you can tweak the figures at the bottom of bast.c, which should 
+look like this:
+      const int bl_percent[BLOCK_TYPES]={75,92,98,100,100,100,100};
+that is: 75% chance you will get the worst brick, 92-75% for the second one
+and so on (no chance to get the best three bricks).
+Editing to 85,95,100,100,100,100,100 will considerably increase the difficulty
+of the game (TODO: some better way to choose this...). 
+Moreover, the old 0.37 algorithm can be compiled in (instead of the new one) 
+by simply renaming bast-old.c to bast.c
+==0.37==
+First public release, created by modifying Petris by Peter Seidler.
+

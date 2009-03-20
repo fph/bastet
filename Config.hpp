@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <string>
+#include <boost/array.hpp>
 
 namespace Bastet{
 
@@ -47,6 +48,8 @@ namespace Bastet{
 
   extern const size_t HowManyHighScores; //how many high scores to save in the file
 
+  enum difficulty_t {difficulty_normal=0,difficulty_hard=1,num_difficulties=2};
+
   class HighScores: public std::vector<HighScore>{ //a set would not do the right job (think to ties)
   public:
     bool Qualifies(int score);
@@ -60,12 +63,12 @@ namespace Bastet{
   class Config{
   private:
     Keys _keys;
-    HighScores _hs;
+    boost::array<HighScores,num_difficulties> _hs;
   public:
     Config();
    ~Config();
     Keys *GetKeys();
-    HighScores *GetHighScores();
+    HighScores *GetHighScores(int difficulty);
     std::string GetConfigFileName() const;
     std::string GetHighScoresFileName() const;
   };

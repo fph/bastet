@@ -506,8 +506,8 @@ namespace Bastet{
     return;
   }
 
-  void Ui::HandleHighScores(){
-    HighScores *hs=config.GetHighScores();
+  void Ui::HandleHighScores(difficulty_t diff){
+    HighScores *hs=config.GetHighScores(diff);
     if(hs->Qualifies(_points)){
       string name=InputDialog(" Congratulations! You got a high score \n Please enter your name");
       hs->InsertHighScore(_points,name);
@@ -520,10 +520,13 @@ namespace Bastet{
     }
   }
 
-  void Ui::ShowHighScores(){
-    HighScores *hs=config.GetHighScores();
-    //shows highscores anyway
+  void Ui::ShowHighScores(difficulty_t diff){
+    HighScores *hs=config.GetHighScores(diff);
     string allscores;
+    if(diff==difficulty_normal)
+      allscores+="**Normal difficulty**\n";
+    else if(diff==difficulty_hard)
+      allscores+="**Hard difficulty**\n";
     format fmt("%-20.20s %8d\n");
     for(HighScores::reverse_iterator it=hs->rbegin();it!=hs->rend();++it){
       allscores+=str(fmt % it->Scorer % it->Score);

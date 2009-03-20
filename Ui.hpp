@@ -22,6 +22,7 @@
 #include "Well.hpp"
 #include "BlockPosition.hpp"
 #include "BlockChooser.hpp"
+#include "Config.hpp"
 
 #include <string>
 #include <curses.h>
@@ -68,10 +69,11 @@ namespace Bastet{
     
     void ChooseLevel();
     void Play(BlockChooser *bc);
-    void HandleHighScores(); ///if needed, asks name for highscores
-    void ShowHighScores();
+    void HandleHighScores(difficulty_t diff); ///if needed, asks name for highscores
+    void ShowHighScores(difficulty_t diff);
     void CustomizeKeys();
   private:
+    difficulty_t _difficulty;
     int _level;
     int _points;
     int _lines;

@@ -38,23 +38,24 @@ int main(int argc, char **argv){
     int choice=ui.MenuDialog(list_of("Play! (normal version)")("Play! (harder version)")("View highscores")("Customize keys")("Quit"));
     switch(choice){
     case 0:{
-      ui.ChooseLevel();
+      //ui.ChooseLevel();
       BastetBlockChooser bc;
       ui.Play(&bc);
-      ui.HandleHighScores();
-      ui.ShowHighScores();
+      ui.HandleHighScores(difficulty_normal);
+      ui.ShowHighScores(difficulty_normal);
     }
       break;
     case 1:{
-      ui.ChooseLevel();
+      //ui.ChooseLevel();
       NoPreviewBlockChooser bc;
       ui.Play(&bc);
-      ui.HandleHighScores();
-      ui.ShowHighScores();
+      ui.HandleHighScores(difficulty_hard);
+      ui.ShowHighScores(difficulty_hard);
     }
       break;
     case 2:
-      ui.ShowHighScores();
+      ui.ShowHighScores(difficulty_normal);
+      ui.ShowHighScores(difficulty_hard);
       break;
     case 3:
       ui.CustomizeKeys();

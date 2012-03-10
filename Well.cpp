@@ -20,8 +20,18 @@
 #include <cassert>
 #include <cstring>
 #include <boost/foreach.hpp>
+#include <sstream>
 
 namespace Bastet{
+
+  std::string WellLine::PrettyPrint() const{
+    std::string s;
+    s.reserve(this->size());
+    for(unsigned int i=0;i<this->size();++i)
+      s.push_back(operator[](i)?'#':' ');
+    return s;
+  }
+
   Well::Well(){
     Clear();
   }
@@ -78,4 +88,14 @@ namespace Bastet{
     ClearLines(lc);
     return lc._completed.count();
   }
+  
+  std::string Well::PrettyPrint() const{
+    std::ostringstream str;
+    str<<std::string(WellWidth+2,'-')<<'\n';
+    BOOST_FOREACH(const WellLine &l, _well)
+      str<<'|'<<l.PrettyPrint()<< "|\n";
+    str<<std::string(WellWidth+2,'-')<<'\n';
+    return str.str();
+  }
 }
+

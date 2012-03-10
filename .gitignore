@@ -1,2 +1,4 @@
 bastet
 depend
+*.o
+*~

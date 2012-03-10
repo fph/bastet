@@ -1,4 +1,5 @@
 bastet
 depend
+Test
 *.o
 *~

@@ -11,4 +11,11 @@ int main(){
   w->LockAndClearLines(Z,p);
   cout<<w->PrettyPrint()<<endl;
   cout<<"Score:"<<Evaluate(w)<<endl;
+
+  w->Clear();
+  BlockPosition p2;
+  p2.Drop(I,w);
+  w->LockAndClearLines(I,p2);
+  cout<<w->PrettyPrint()<<endl;
+  cout<<"Score:"<<Evaluate(w)<<endl;  
 }

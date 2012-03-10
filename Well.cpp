@@ -94,7 +94,7 @@ namespace Bastet{
     str<<std::string(WellWidth+2,'-')<<'\n';
     BOOST_FOREACH(const WellLine &l, _well)
       str<<'|'<<l.PrettyPrint()<< "|\n";
-    str<<std::string(WellWidth+2,'-')<<'\n';
+    str<<std::string(WellWidth+2,'-');
     return str.str();
   }
 }

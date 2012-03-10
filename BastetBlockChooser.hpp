@@ -40,7 +40,9 @@ namespace std{namespace tr1{
 namespace Bastet{
 
   static const long GameOverScore=-1000; //bogus score assigned to combinations which cause game over
-  long Evaluate(const Well *w, int extralines); //assigns a score to a position w + a number of extra lines deleted while getting there
+  
+//  declared in Well.hpp
+//  long Evaluate(const Well *w, int extralines); //assigns a score to a position w + a number of extra lines deleted while getting there
 
   typedef BlockPosition Vertex;
 

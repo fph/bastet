@@ -5,6 +5,10 @@ using namespace Bastet;
 using namespace std;
 
 int main(){
-  Well w;
-  cout<<w.PrettyPrint()<<endl;
+  Well *w=new Well;
+  BlockPosition p;
+  p.Drop(Z,w);
+  w->LockAndClearLines(Z,p);
+  cout<<w->PrettyPrint()<<endl;
+  cout<<"Score:"<<Evaluate(w)<<endl;
 }

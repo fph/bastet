@@ -1,4 +1,5 @@
-SOURCES=Ui.cpp main.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp BastetBlockChooser.cpp
+SOURCES=Ui.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp BastetBlockChooser.cpp
+MAIN=main.cpp
 CC=g++
 TESTS=Test.cpp
 PROGNAME=bastet
@@ -10,18 +11,19 @@ CXXFLAGS+=-DNDEBUG -Wall
 
 all: $(PROGNAME) $(TESTS:.cpp=)
 
-Test: Well.o BlockPosition.o Block.o
+Test: $(SOURCES:.cpp=.o)
+	$(CXX) -ggdb -o $(TESTS:.cpp=) $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o) $(LDFLAGS) 
 
-depend: *.hpp $(SOURCES) $(TESTS)
-	$(CXX) -MM $(SOURCES) $(TESTS)> depend
+depend: *.hpp $(SOURCES) $(MAIN) $(TESTS)
+	$(CXX) -MM $(SOURCES) $(MAIN) $(TESTS)> depend
 
 include depend
 
-$(PROGNAME): $(SOURCES:.cpp=.o)
-	$(CXX) -ggdb -o $(PROGNAME) $(SOURCES:.cpp=.o) $(LDFLAGS) 
+$(PROGNAME): $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o)
+	$(CXX) -ggdb -o $(PROGNAME) $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o) $(LDFLAGS) 
 
 clean:
-	rm -f $(SOURCES:.cpp=.o) $(PROGNAME)
+	rm -f $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o) $(PROGNAME)
 
 mrproper: clean
 	rm -f *~

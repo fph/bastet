@@ -1,6 +1,5 @@
 SOURCES=Ui.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp BastetBlockChooser.cpp
 MAIN=main.cpp
-CC=g++
 TESTS=Test.cpp
 PROGNAME=bastet
 LDFLAGS+=-lncurses -lboost_program_options

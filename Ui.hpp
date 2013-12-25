@@ -73,7 +73,7 @@ namespace Bastet{
     void ShowHighScores(difficulty_t diff);
     void CustomizeKeys();
   private:
-    difficulty_t _difficulty;
+    //    difficulty_t _difficulty; //unused for now
     int _level;
     int _points;
     int _lines;

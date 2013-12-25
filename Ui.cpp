@@ -79,20 +79,22 @@ namespace Bastet{
   }
  
   int BorderedWindow::GetMinX(){
-    int y,x;
+    int x, y;
     getbegyx(_border,y,x);
+    (void)(y); //silence warning about unused y
     return x;
   }
 
   int BorderedWindow::GetMinY(){
-    int y,x;
+    int y, x;
     getbegyx(_border,y,x);
     return y;
   }
 
   int BorderedWindow::GetMaxX(){
-    int y,x;
+    int x, y;
     getmaxyx(_border,y,x);
+    (void)(y); //silence warning about unused y
     return GetMinX()+x;
   }
 
@@ -171,7 +173,7 @@ namespace Bastet{
     BOOST_FOREACH(string &s, splits){
       maxlen=max(maxlen,s.size());
     }
-    return (Dot){maxlen+1,splits.size()};
+    return (Dot){int(maxlen+1),int(splits.size())};
   }
 
   void Ui::MessageDialog(const std::string &message){
@@ -233,7 +235,7 @@ namespace Bastet{
       width=max(width,s.size());
     }
 
-    Dot d={width+5,choices.size()};
+    Dot d={int(width+5),int(choices.size())};
     BorderedWindow w(d.y,d.x);
     wattrset((WINDOW *)w,COLOR_PAIR(20));
     for(size_t i=0;i<choices.size();++i){

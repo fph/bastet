@@ -23,19 +23,19 @@
 
 #include "Well.hpp"
 
-#include <tr1/unordered_set>
+#include <unordered_set>
 #include <set>
 #include <boost/functional/hash.hpp>
 
-//boilerplate to use boost::hash as std::tr1::hash
-namespace std{namespace tr1{
+//boilerplate to use boost::hash as std::hash
+namespace std{
     template<> struct hash<Bastet::BlockPosition>{
       size_t operator()(const Bastet::BlockPosition &fb) const{
 	static boost::hash<Bastet::BlockPosition> h;
 	return h(fb);
       }
     };
-  }}
+  }
 
 namespace Bastet{
 
@@ -85,7 +85,7 @@ namespace Bastet{
   public:
     Searcher(BlockType b, const Well *well, Vertex v, WellVisitor *visitor);
   private:
-    std::tr1::unordered_set<Vertex> _visited;
+    std::unordered_set<Vertex> _visited;
     //std::set<Vertex> _visited; ^^ the above is more efficient, we need to do many inserts
     BlockType _block;
     const Well *_well;

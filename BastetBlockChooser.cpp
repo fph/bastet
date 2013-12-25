@@ -21,7 +21,7 @@
 
 #include <boost/functional/hash.hpp>
 #include <boost/foreach.hpp>
-#include <tr1/unordered_set>
+#include <unordered_set>
 #include <cstdlib>
 #include <algorithm>
 

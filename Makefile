@@ -2,15 +2,15 @@ SOURCES=Ui.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp 
 MAIN=main.cpp
 TESTS=Test.cpp
 PROGNAME=bastet
-LDFLAGS+=-lncurses -lboost_program_options
+LDFLAGS+=-lncurses -lboost_program_options -std=c++11
 #CXXFLAGS+=-ggdb -Wall
-CXXFLAGS+=-DNDEBUG -Wall
+CXXFLAGS+=-DNDEBUG -Wall -std=c++11
 #CXXFLAGS+=-pg
 #LDFLAGS+=-pg
 
 all: $(PROGNAME) $(TESTS:.cpp=)
 
-Test: $(SOURCES:.cpp=.o)
+Test: $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o)
 	$(CXX) -ggdb -o $(TESTS:.cpp=) $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o) $(LDFLAGS) 
 
 depend: *.hpp $(SOURCES) $(MAIN) $(TESTS)

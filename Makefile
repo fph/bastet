@@ -22,7 +22,7 @@ $(PROGNAME): $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o)
 	$(CXX) -ggdb -o $(PROGNAME) $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o) $(LDFLAGS) 
 
 clean:
-	rm -f $(SOURCES:.cpp=.o) $(MAIN:.cpp=.o) $(PROGNAME)
+	rm -f $(SOURCES:.cpp=.o) $(TESTS:.cpp=.o) $(MAIN:.cpp=.o) $(PROGNAME)
 
 mrproper: clean
 	rm -f *~

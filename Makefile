@@ -2,7 +2,7 @@ SOURCES=Ui.cpp Block.cpp Well.cpp BlockPosition.cpp Config.cpp BlockChooser.cpp 
 MAIN=main.cpp
 TESTS=Test.cpp
 PROGNAME=bastet
-BOOST_PO+=-lboost_program_options
+BOOST_PO?=-lboost_program_options
 LDFLAGS+=-lncurses $(BOOST_PO) -std=c++11
 #CXXFLAGS+=-ggdb -Wall
 CXXFLAGS+=-DNDEBUG -Wall -std=c++11

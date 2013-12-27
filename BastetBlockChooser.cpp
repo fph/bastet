@@ -19,9 +19,7 @@
 #include "BastetBlockChooser.hpp"
 #include "Block.hpp"
 
-#include <boost/functional/hash.hpp>
 #include <boost/foreach.hpp>
-#include <unordered_set>
 #include <cstdlib>
 #include <algorithm>
 

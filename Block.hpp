@@ -62,6 +62,7 @@ namespace Bastet{
     S=5,
     L=6
   };
+  const size_t nBlockTypes=7;
 
   struct Dot;
 

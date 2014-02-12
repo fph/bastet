@@ -65,7 +65,7 @@ namespace Bastet{
 
   Queue BastetBlockChooser::GetStartingQueue(){
     Queue q;
-    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman).
+    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman and chooses the most favorable start for the user).
     BlockType first;
     switch(random()%4){
     case 0:
@@ -78,11 +78,11 @@ namespace Bastet{
       first=T;break;
     }
     q.push_back(first);
-    q.push_back(BlockType(random()%7));
+    q.push_back(BlockType(random()%nBlockTypes));
     return q;
   }
 
-  boost::array<long,7> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
+  boost::array<long,nBlockTypes> BastetBlockChooser::ComputeMainScores(const Well *well, BlockType currentBlock){
     RecursiveVisitor visitor;
     Searcher(currentBlock,well,BlockPosition(),&visitor);
     return visitor.GetScores();
@@ -90,21 +90,21 @@ namespace Bastet{
 
 
   BlockType BastetBlockChooser::GetNext(const Well *well, const Queue &q){
-    boost::array<long,7> mainScores=ComputeMainScores(well,q.front());
-    boost::array<long,7> finalScores=mainScores;
+    boost::array<long,nBlockTypes> mainScores=ComputeMainScores(well,q.front());
+    boost::array<long,nBlockTypes> finalScores=mainScores;
 
     //perturbes scores to randomize tie handling
     BOOST_FOREACH(long &i, finalScores)
       i+=(random()%100);
 
     //prints the final scores, for debugging convenience
-    for(int i=0;i<7;++i){
+    for(int i=0;i<nBlockTypes;++i){
       //mvprintw(i,1,"%c: %d",GetChar(BlockType(i)),finalScores[i]);
     }
 
     //the mainScores alone would give rise to many repeated blocks (e.g., in the case in which only one type of block does not let you clear a line, you keep getting that). This is bad, since it would break the "plausibility" of the sequence you get. We need a correction.
     
-    boost::array<long,7> temp(finalScores);
+    boost::array<long,nBlockTypes> temp(finalScores);
     sort(temp.begin(),temp.end());
 
     //always returns the worst block if it's different from the last one
@@ -112,9 +112,9 @@ namespace Bastet{
     if(BlockType(worstblock) != q.front()) return BlockType(worstblock);
     
     //otherwise, returns the pos-th block, where pos is random
-    static const boost::array<int,7> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
+    static const boost::array<int,nBlockTypes> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
     int pos=find_if(blockPercentages.begin(),blockPercentages.end(),bind2nd(greater_equal<int>(),random()%100)) - blockPercentages.begin();
-    assert(pos>=0 && pos<7);
+    assert(pos>=0 && pos<nBlockTypes);
 
     int chosenBlock=find(finalScores.begin(),finalScores.end(),temp[pos])-finalScores.begin();
     return BlockType(chosenBlock);
@@ -158,7 +158,7 @@ namespace Bastet{
     Well w2(*w); //copy
     try{
       int linescleared=w2.LockAndClearLines(b,v); //may throw GO
-      for(int i=0;i<7;++i){
+      for(int i=0;i<nBlockTypes;++i){
 	try{
 	  BestScoreVisitor visitor(linescleared);
 	  BlockPosition p;
@@ -174,8 +174,7 @@ namespace Bastet{
   NoPreviewBlockChooser::~NoPreviewBlockChooser(){};
   Queue NoPreviewBlockChooser::GetStartingQueue(){
     Queue q;
-    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman).
-    BlockType first;
+    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman and chooses the most favorable start for the user).    BlockType first;
     switch(random()%4){
     case 0:
       first=I;break;
@@ -192,8 +191,8 @@ namespace Bastet{
 
   BlockType NoPreviewBlockChooser::GetNext(const Well *well, const Queue &q){
     assert(q.empty());
-    boost::array<long,7> finalScores;
-    for(int t=0;t<7;++t){
+    boost::array<long,nBlockTypes> finalScores;
+    for(int t=0;t<nBlockTypes;++t){
       BestScoreVisitor v;
       Searcher searcher(BlockType(t),well,BlockPosition(),&v);
       finalScores[t]=v.GetScore();
@@ -204,13 +203,13 @@ namespace Bastet{
       i+=(random()%100);
 
     //sorts
-    boost::array<long,7> temp(finalScores);
+    boost::array<long,nBlockTypes> temp(finalScores);
     sort(temp.begin(),temp.end());
 
     //returns the pos-th block, where pos is random
-    static const boost::array<int,7> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
+    static const boost::array<int,nBlockTypes> blockPercentages={{80, 92, 98, 100, 100, 100, 100}};
     int pos=find_if(blockPercentages.begin(),blockPercentages.end(),bind2nd(greater_equal<int>(),random()%100)) - blockPercentages.begin();
-    assert(pos>=0 && pos<7);
+    assert(pos>=0 && pos<nBlockTypes);
 
     int chosenBlock=find(finalScores.begin(),finalScores.end(),temp[pos])-finalScores.begin();
     return BlockType(chosenBlock);

@@ -98,7 +98,7 @@ namespace Bastet{
       i+=(random()%100);
 
     //prints the final scores, for debugging convenience
-    for(int i=0;i<nBlockTypes;++i){
+    for(size_t i=0;i<nBlockTypes;++i){
       //mvprintw(i,1,"%c: %d",GetChar(BlockType(i)),finalScores[i]);
     }
 
@@ -158,7 +158,7 @@ namespace Bastet{
     Well w2(*w); //copy
     try{
       int linescleared=w2.LockAndClearLines(b,v); //may throw GO
-      for(int i=0;i<nBlockTypes;++i){
+      for(size_t i=0;i<nBlockTypes;++i){
 	try{
 	  BestScoreVisitor visitor(linescleared);
 	  BlockPosition p;
@@ -174,7 +174,8 @@ namespace Bastet{
   NoPreviewBlockChooser::~NoPreviewBlockChooser(){};
   Queue NoPreviewBlockChooser::GetStartingQueue(){
     Queue q;
-    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman and chooses the most favorable start for the user).    BlockType first;
+    //The first block is always I,J,L,T (cfr. Tetris guidelines, Bastet is a gentleman and chooses the most favorable start for the user).
+    BlockType first;
     switch(random()%4){
     case 0:
       first=I;break;
@@ -192,7 +193,7 @@ namespace Bastet{
   BlockType NoPreviewBlockChooser::GetNext(const Well *well, const Queue &q){
     assert(q.empty());
     boost::array<long,nBlockTypes> finalScores;
-    for(int t=0;t<nBlockTypes;++t){
+    for(size_t t=0;t<nBlockTypes;++t){
       BestScoreVisitor v;
       Searcher searcher(BlockType(t),well,BlockPosition(),&v);
       finalScores[t]=v.GetScore();

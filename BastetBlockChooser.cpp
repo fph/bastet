@@ -34,7 +34,9 @@ using namespace boost;
 
 namespace Bastet{
   long Evaluate(const Well *w, int extralines){
+    //computes the score for a final position reached in the well + "extralines" lines cleared
     //high=good for the player
+
     //lines
     long score=100000000*extralines;
 

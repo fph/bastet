@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=bastet
+Comment=Evil falling block game
+Exec=bastet
+Icon=bastet
+Terminal=true
+Categories=Game;BlocksGame;ConsoleOnly;
+Keywords= tetris;

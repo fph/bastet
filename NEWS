@@ -1,3 +1,8 @@
+==0.43.1==
+Small fixes: appdata and desktop file, moved to an unordered_set header that
+should work on most compilers. Should still port to autotools or something
+similar sometimes in the future.
+
 ==0.43==
 Complete code rewrite. As I go on trying to grok C++, algorithms and data
 structures, and as I started to understand more of Peter's code, I found 

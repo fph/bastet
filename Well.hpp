@@ -66,7 +66,7 @@ namespace Bastet{
     LinesCompleted Lock(BlockType t, const BlockPosition &p); //permanently adds a tetromino to the well; returns a bitset of 4 bits where return[i]==1 iff line (start of fb)+i is complete
     void ClearLines(const LinesCompleted &lc); //removes the given lines from the well (whether they are completed or not)
     int LockAndClearLines(BlockType t, const BlockPosition &p); //locks, clear lines, returns number of lines cleared
-    friend long Evaluate(const Well *w, int extralines=0); //for BastetBlockChooser
+    friend long Evaluate(const Well *w, int extralines); //for BastetBlockChooser
     std::string PrettyPrint() const;
   };
   

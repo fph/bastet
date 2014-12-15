@@ -8,7 +8,7 @@
  <summary>Evil falling block game</summary>
  <description>
   <p>
-   Bastet (short for <em>Bastard Tetris</em>) is a simple terminal-based falling block game equipped with an AI which computes how useful the bricks are and tries to give you the worst possible one. 
+   Bastet (short for "Bastard Tetris") is a simple terminal-based falling block game equipped with an AI which computes how useful the bricks are and tries to give you the worst possible one. 
    </p>
    <p>
    Completing lines is significantly more difficult than in the usual game. Playing Bastet can be a painful experience at first, especially if you usually make "canyons" and wait for the long I-shaped block.

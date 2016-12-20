@@ -23,7 +23,7 @@
 
 #include "Well.hpp"
 
-#include <boost/tr1/tr1/unordered_set>
+#include <boost/tr1/unordered_set.hpp>
 #include <set>
 #include <boost/functional/hash.hpp>
 

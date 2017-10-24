@@ -54,7 +54,7 @@ namespace Bastet{
 
   bool Well::IsLineComplete(int y) const{
     for(int x=0;x<(int)WellWidth;++x)
-      if(_well[y+2][x]==false)
+      if(_well[y+2][x]==true)
 	return false;
     return true;
   }

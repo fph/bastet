@@ -34,7 +34,7 @@ using namespace boost::assign;
 int main(int argc, char **argv){
   Ui ui;
   while(1){
-    
+    cout << "THIS GAME IS MEAN" << endl;
     int choice=ui.MenuDialog(list_of("Play! (normal version)")("Play! (harder version)")("View highscores")("Customize keys")("Quit"));
     switch(choice){
     case 0:{

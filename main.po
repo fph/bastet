@@ -1,0 +1,39 @@
+# Spanish translations for PACKAGE package.
+# Copyright (C) 2018 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# rosali <rosali@rosali>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-02 18:18-0300\n"
+"PO-Revision-Date: 2018-05-02 18:19-0300\n"
+"Last-Translator: rosali <rosali@rosali>\n"
+"Language-Team: Spanish\n"
+"Language: es_Es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main.cpp:47
+msgid "Customize keys"
+msgstr "Personalizar teclas"
+
+#: main.cpp:47
+msgid "Quit"
+msgstr "Salir"
+
+#: main.cpp:47
+msgid "harder_version"
+msgstr "¡Juega! (Versión más difícil)"
+
+#: main.cpp:47
+msgid "normal_version"
+msgstr "¡Juega! (Versión normal)"
+
+#: main.cpp:47
+msgid "scores"
+msgstr "Ver puntuaciones altas"
+

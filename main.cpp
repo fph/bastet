@@ -24,6 +24,12 @@
 //DBG
 #include <iostream>
 #include <boost/format.hpp>
+#include <libintl.h>
+#include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define _(STRING) gettext(STRING)
 
 using namespace Bastet;
 using namespace std;
@@ -33,9 +39,12 @@ using namespace boost::assign;
 
 int main(int argc, char **argv){
   Ui ui;
+  setlocale(LC_ALL, "");
+  bindtextdomain("main", "./locale");
+  textdomain("main");
   while(1){
     
-    int choice=ui.MenuDialog(list_of("Play! (normal version)")("Play! (harder version)")("View highscores")("Customize keys")("Quit"));
+    int choice=ui.MenuDialog(list_of(_("normal_version"))(_("harder_version"))(_("scores"))(_("Customize keys"))(_("Quit")));
     switch(choice){
     case 0:{
       //ui.ChooseLevel();

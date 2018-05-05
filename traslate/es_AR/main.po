@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-03 19:48-0300\n"
-"PO-Revision-Date: 2018-05-03 19:52-0300\n"
+"POT-Creation-Date: 2018-05-05 19:31-0300\n"
+"PO-Revision-Date: 2018-05-05 19:31-0300\n"
 "Last-Translator: facundo <facundo@vigo>\n"
 "Language-Team: Argentinian\n"
 "Language: es_AR\n"
@@ -19,5 +19,41 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: main.cpp:49
+msgid "Customize keys"
+msgstr "Personalizar claves"
+
+#: main.cpp:49
+msgid "Play! (harder version)"
+msgstr "Jugar! (version dificil)"
+
+#: main.cpp:49
 msgid "Play! (normal version)"
 msgstr "Jugar! (version normal)"
+
+#: main.cpp:49
+msgid "Quit"
+msgstr "Salir"
+
+#: main.cpp:49
+msgid "View highscores"
+msgstr "Ver mejores puntuaciones"
+
+#: Ui.cpp:325
+msgid " Next block:"
+msgstr "proxima pieza:"
+
+#: Ui.cpp:329
+msgid "Score:"
+msgstr "Puntos:"
+
+#: Ui.cpp:331
+msgid "Lines:"
+msgstr "Lineas:"
+
+#: Ui.cpp:333
+msgid "Level:"
+msgstr "Nivel:"
+
+#: Ui.cpp:396
+msgid "Press SPACE or ENTER to resume the game"
+msgstr "Presione SPACE o ENTER para reanudar el juego"

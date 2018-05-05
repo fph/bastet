@@ -28,8 +28,15 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include <libintl.h>
+#include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define _(STRING) gettext(STRING)
+
 using namespace std;
 using namespace boost;
+
 
 namespace Bastet{
 
@@ -302,6 +309,12 @@ namespace Bastet{
   }
 
   void Ui::RedrawStatic(){
+
+  setlocale(LC_ALL, "");
+  bindtextdomain("main", "/usr/share/locale");
+  textdomain("main");
+
+
     erase();
     wrefresh(stdscr);
     _wellWin.RedrawBorder();
@@ -309,15 +322,15 @@ namespace Bastet{
     _scoreWin.RedrawBorder();
 
     wattrset((WINDOW*)_nextWin,COLOR_PAIR(17));
-    mvwprintw(_nextWin,0,0," Next block:");
+    mvwprintw(_nextWin,0,0,_(" Next block:"));
     wrefresh(_nextWin);
 
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(17));
-    mvwprintw(_scoreWin,1,0,"Score:");
+    mvwprintw(_scoreWin,1,0,_("Score:"));
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(18));
-    mvwprintw(_scoreWin,3,0,"Lines:");
+    mvwprintw(_scoreWin,3,0,_("Lines:"));
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(19));
-    mvwprintw(_scoreWin,5,0,"Level:");
+    mvwprintw(_scoreWin,5,0,_("Level:"));
     wrefresh(_scoreWin);
   }
 
@@ -333,6 +346,10 @@ namespace Bastet{
     
     time.tv_sec=0;
     time.tv_usec=delay[_level];
+
+    setlocale(LC_ALL, "");
+    bindtextdomain("main", "/usr/share/locale");
+    textdomain("main");
     
     //assumes nodelay(stdscr,TRUE) has already been called
     BlockPosition p;
@@ -376,7 +393,7 @@ namespace Bastet{
 	  break;
 	}
 	else if(ch==keys->Pause){
-	  MessageDialog("Press SPACE or ENTER to resume the game");
+	  MessageDialog(_("Press SPACE or ENTER to resume the game"));
 	  RedrawStatic();
 	  RedrawWell(w,b,p);
 	  nodelay(stdscr,TRUE);

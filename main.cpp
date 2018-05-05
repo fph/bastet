@@ -46,7 +46,8 @@ textdomain("main");
   Ui ui;
   while(1){
     
-    int choice=ui.MenuDialog(list_of(_("Play! (normal version)"))("Play! (harder version)")("View highscores")("Customize keys")("Quit"));
+    int choice=ui.MenuDialog(list_of(_("Play! (normal version)"))(_("Play! (harder version)"))(_("View highscores"))(_("Customize keys"))(_("Quit")));  
+    
     switch(choice){
     case 0:{
       //ui.ChooseLevel();

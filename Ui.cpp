@@ -528,15 +528,15 @@ namespace Bastet{
 
   void Ui::HandleHighScores(difficulty_t diff){
     HighScores *hs=config.GetHighScores(diff);
+    setlocale(LC_ALL, "");
+    bindtextdomain("main", "/usr/share/locale");
+    textdomain("main");
+    
     if(hs->Qualifies(_points)){
-      string name=InputDialog(" Congratulations! You got a high score \n Please enter your name");
+      string name=InputDialog(_(" Congratulations! You got a high score \n Please enter your name"));
       hs->InsertHighScore(_points,name);
     }else{
-      MessageDialog("You did not get into\n"
-		    "the high score list!\n"
-		    "\n"
-		    "     Try again!\n"
-		    );
+      MessageDialog((_("You did not get into\n the high score list! \n \n      Try again!\n")));
     }
   }
 

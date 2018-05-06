@@ -57,3 +57,11 @@ msgstr "Nivel:"
 #: Ui.cpp:396
 msgid "Press SPACE or ENTER to resume the game"
 msgstr "Presione SPACE o ENTER para reanudar el juego"
+
+#: Ui.cpp:532
+msgid " Congratulations! You got a high score \n Please enter your name"
+msgstr " Felicitaciones! Obtuvo un puntaje alto \n Por favor ingrese su nombre"
+
+#: Ui.cpp:539
+msgid "You did not get into\n the high score list! \n \n      Try again! \n"
+msgstr "No ingresaste en la lista de puntajes altos! \n \n Inténtalo de nuevo! \n"

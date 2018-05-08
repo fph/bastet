@@ -118,13 +118,18 @@ namespace Bastet{
   }
 
   Curses::Curses(){
+
+    setlocale(LC_ALL, "");
+    bindtextdomain("main", "/usr/share/locale");
+    textdomain("main");
+
     if(initscr()==NULL){
-      fprintf(stderr,"bastet: error while initializing graphics (ncurses library).\n");
+      fprintf(stderr,(_("bastet: error while initializing graphics (ncurses library).\n")));
       exit(1);
     }
     if(!has_colors()){
       endwin();
-      fprintf(stderr,"bastet: no color support, sorry. Ask the author for a black and white version.");
+      fprintf(stderr,(_("bastet: no color support, sorry. Ask the author for a black and white version.")));
       exit(1);
     }
     
@@ -536,17 +541,24 @@ namespace Bastet{
       string name=InputDialog(_(" Congratulations! You got a high score \n Please enter your name"));
       hs->InsertHighScore(_points,name);
     }else{
-      MessageDialog((_("You did not get into\n the high score list! \n \n      Try again!\n")));
+      MessageDialog("You did not get into\n" 
+                    "the high score list! \n"
+                    "\n"
+                    "      Try again!\n"
+                    );
     }
   }
 
   void Ui::ShowHighScores(difficulty_t diff){
     HighScores *hs=config.GetHighScores(diff);
     string allscores;
+    setlocale(LC_ALL, "");
+    bindtextdomain("main", "/usr/share/locale");
+    textdomain("main");
     if(diff==difficulty_normal)
-      allscores+="**Normal difficulty**\n";
+      allscores+=(_("**Normal difficulty**\n"));
     else if(diff==difficulty_hard)
-      allscores+="**Hard difficulty**\n";
+      allscores+=(_("**Hard difficulty**\n"));
     format fmt("%-20.20s %8d\n");
     for(HighScores::reverse_iterator it=hs->rbegin();it!=hs->rend();++it){
       allscores+=str(fmt % it->Scorer % it->Score);
@@ -556,15 +568,20 @@ namespace Bastet{
 
   void Ui::CustomizeKeys(){
     Keys *keys=config.GetKeys();
+
+    setlocale(LC_ALL, "");
+    bindtextdomain("main", "/usr/share/locale");
+    textdomain("main");
+
     format fmt(
-      "Press the key you wish to use for:\n\n"
+      "Press the key you wish to use for:)\n\n" 
       "%=1.34s\n\n");
-    keys->Down=KeyDialog(str(fmt % "move tetromino DOWN (soft-drop)"));
-    keys->Left=KeyDialog(str(fmt % "move tetromino LEFT"));
-    keys->Right=KeyDialog(str(fmt % "move tetromino RIGHT"));
-    keys->RotateCW=KeyDialog(str(fmt % "rotate tetromino CLOCKWISE"));
-    keys->RotateCCW=KeyDialog(str(fmt % "rotate tetromino COUNTERCLOCKWISE"));
-    keys->Drop=KeyDialog(str(fmt % "DROP tetromino (move down as much as possible immediately)"));
-    keys->Pause=KeyDialog(str(fmt % "PAUSE the game"));
+    keys->Down=KeyDialog(str(fmt % _("move tetromino DOWN (soft-drop)")));
+    keys->Left=KeyDialog(str(fmt % _("move tetromino LEFT")));
+    keys->Right=KeyDialog(str(fmt % _("move tetromino RIGHT")));
+    keys->RotateCW=KeyDialog(str(fmt % _("rotate tetromino CLOCKWISE")));
+    keys->RotateCCW=KeyDialog(str(fmt % _("rotate tetromino COUNTERCLOCKWISE")));
+    keys->Drop=KeyDialog(str(fmt % _("DROP tetromino (move down as much as possible immediately)")));
+    keys->Pause=KeyDialog(str(fmt % _("PAUSE the game")));
   }
 }

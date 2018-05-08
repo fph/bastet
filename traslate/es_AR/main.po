@@ -38,30 +38,76 @@ msgstr "Salir"
 msgid "View highscores"
 msgstr "Ver mejores puntuaciones"
 
-#: Ui.cpp:325
+#: Ui.cpp:127
+msgid "bastet: error while initializing graphics (ncurses library).\n"
+msgstr "bastet: error al inicializar gráficos (biblioteca ncurses).\n"
+
+#:Ui.cpp:132
+msgid "bastet: no color support, sorry. Ask the author for a black and white version."
+msgstr "bastet: sin soporte de color, lo siento. Pidale al autor una versión en blanco y negro."
+
+#: Ui.cpp:330
 msgid " Next block:"
 msgstr "proxima pieza:"
 
-#: Ui.cpp:329
+#: Ui.cpp:3334
 msgid "Score:"
 msgstr "Puntos:"
 
-#: Ui.cpp:331
+#: Ui.cpp:336
 msgid "Lines:"
 msgstr "Lineas:"
 
-#: Ui.cpp:333
+#: Ui.cpp:338
 msgid "Level:"
 msgstr "Nivel:"
 
-#: Ui.cpp:396
+#: Ui.cpp:401
 msgid "Press SPACE or ENTER to resume the game"
 msgstr "Presione SPACE o ENTER para reanudar el juego"
 
-#: Ui.cpp:532
+#: Ui.cpp:541
 msgid " Congratulations! You got a high score \n Please enter your name"
 msgstr " Felicitaciones! Obtuvo un puntaje alto \n Por favor ingrese su nombre"
 
-#: Ui.cpp:539
-msgid "You did not get into\n the high score list! \n \n      Try again! \n"
-msgstr "No ingresaste en la lista de puntajes altos! \n \n Inténtalo de nuevo! \n"
+#: Ui.cpp:559
+msgid "**Normal difficulty**\n"
+msgstr "**Dificultad Normal**\n"
+
+#: Ui.cpp:561
+msgid "**Hard difficulty**\n"
+msgstr "**Dificultad Dificil**\n"
+
+
+#: Ui.cpp:579
+msgid "move tetromino DOWN (soft-drop)"
+msgstr "mover tetromino ABAJO (suave)"
+
+#: Ui.cpp:580
+msgid "move tetromino LEFT"
+msgstr "mover tetromino IZQUIERDA"
+
+#: Ui.cpp:581
+msgid "move tetromino RIGHT"
+msgstr "mover tetromino DERECHA"
+
+#: Ui.cpp:582
+msgid "rotate tetromino CLOCKWISE"
+msgstr "rotar tetromino AGUJAS DEL RELOJ"
+
+#: Ui.cpp:583
+msgid "rotate tetromino COUNTERCLOCKWISE"
+msgstr "rotar tetromino SENTIDO CONTRARIO AGUJAS DEL RELOJ"
+
+#: Ui.cpp:584
+msgid "DROP tetromino (move down as much as possible immediately)"
+msgstr "SOLTAR tetromino (Bajar Rapido)"
+
+#: Ui.cpp:585
+msgid "PAUSE the game"
+msgstr "PAUSA del Juego"
+
+
+
+
+

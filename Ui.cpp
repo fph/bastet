@@ -536,16 +536,16 @@ namespace Bastet{
     setlocale(LC_ALL, "");
     bindtextdomain("main", "/usr/share/locale");
     textdomain("main");
-    
+    string prueba = _(" You did not get into \n the high score list! \n \n      Try again!\n");
     if(hs->Qualifies(_points)){
       string name=InputDialog(_(" Congratulations! You got a high score \n Please enter your name"));
       hs->InsertHighScore(_points,name);
     }else{
-      MessageDialog("You did not get into\n" 
+      MessageDialog(prueba/*_("You did not get into\n" 
                     "the high score list! \n"
                     "\n"
                     "      Try again!\n"
-                    );
+                    )*/);
     }
   }
 

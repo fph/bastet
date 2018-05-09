@@ -72,7 +72,7 @@ msgstr " No ingresaste en la lista de puntajes altos! \n \n             Intental
 
 #: Ui.cpp:541
 msgid " Congratulations! You got a high score \n Please enter your name"
-msgstr " Felicitaciones! Obtuvo un puntaje alto \n Por favor ingrese su nombre"
+msgstr " Felicitaciones! Obtuviste puntaje alto, por favor ingresa tu nombre"
 
 #: Ui.cpp:559
 msgid "**Normal difficulty**\n"

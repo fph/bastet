@@ -536,16 +536,16 @@ namespace Bastet{
     setlocale(LC_ALL, "");
     bindtextdomain("main", "/usr/share/locale");
     textdomain("main");
-    string prueba = _(" You did not get into \n the high score list! \n \n      Try again!\n");
+    
     if(hs->Qualifies(_points)){
       string name=InputDialog(_(" Congratulations! You got a high score \n Please enter your name"));
       hs->InsertHighScore(_points,name);
     }else{
-      MessageDialog(prueba/*_("You did not get into\n" 
+      MessageDialog((_(" You did not get into \n the high score list! \n \n      Try again!\n")));/*_("You did not get into\n" 
                     "the high score list! \n"
                     "\n"
                     "      Try again!\n"
-                    )*/);
+                    ));*/
     }
   }
 
@@ -568,13 +568,13 @@ namespace Bastet{
 
   void Ui::CustomizeKeys(){
     Keys *keys=config.GetKeys();
-
     setlocale(LC_ALL, "");
     bindtextdomain("main", "/usr/share/locale");
     textdomain("main");
+    string traslate = _("Press the key you wish to use for:"); /* content is passed to the variable traslate to use the translation function */
 
     format fmt(
-      "Press the key you wish to use for:)\n\n" 
+      traslate + "\n\n" 
       "%=1.34s\n\n");
     keys->Down=KeyDialog(str(fmt % _("move tetromino DOWN (soft-drop)")));
     keys->Left=KeyDialog(str(fmt % _("move tetromino LEFT")));

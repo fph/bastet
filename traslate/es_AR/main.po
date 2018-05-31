@@ -1,0 +1,120 @@
+# Spanish translations for PACKAGE package
+# Traducciones al español para el paquete PACKAGE.
+# Copyright (C) 2018 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# facundo <facundo@vigo>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-05 19:31-0300\n"
+"PO-Revision-Date: 2018-05-05 19:31-0300\n"
+"Last-Translator: facundo <facundo@vigo>\n"
+"Language-Team: Argentinian\n"
+"Language: es_AR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main.cpp:49
+msgid "Customize keys"
+msgstr "Personalizar claves"
+
+#: main.cpp:49
+msgid "Play! (harder version)"
+msgstr "Jugar! (version dificil)"
+
+#: main.cpp:49
+msgid "Play! (normal version)"
+msgstr "Jugar! (version normal)"
+
+#: main.cpp:49
+msgid "Quit"
+msgstr "Salir"
+
+#: main.cpp:49
+msgid "View highscores"
+msgstr "Ver mejores puntuaciones"
+
+#: Ui.cpp:127
+msgid "bastet: error while initializing graphics (ncurses library).\n"
+msgstr "bastet: error al inicializar gráficos (biblioteca ncurses).\n"
+
+#:Ui.cpp:132
+msgid "bastet: no color support, sorry. Ask the author for a black and white version."
+msgstr "bastet: sin soporte de color, lo siento. Pidale al autor una versión en blanco y negro."
+
+#: Ui.cpp:330
+msgid " Next block:"
+msgstr "proxima pieza:"
+
+#: Ui.cpp:3334
+msgid "Score:"
+msgstr "Puntos:"
+
+#: Ui.cpp:336
+msgid "Lines:"
+msgstr "Lineas:"
+
+#: Ui.cpp:338
+msgid "Level:"
+msgstr "Nivel:"
+
+#: Ui.cpp:401
+msgid "Press SPACE or ENTER to resume the game"
+msgstr "Presione SPACE o ENTER para reanudar el juego"
+
+#:Ui.cpp:544
+msgid " You did not get into \n the high score list! \n \n      Try again!\n"
+msgstr " No ingresaste en la lista de puntajes altos! \n \n             Intentalo de nuevo! \n"
+
+#: Ui.cpp:541
+msgid " Congratulations! You got a high score \n Please enter your name"
+msgstr " Felicitaciones! Obtuviste puntaje alto, por favor ingresa tu nombre"
+
+#: Ui.cpp:559
+msgid "**Normal difficulty**\n"
+msgstr "**Dificultad Normal**\n"
+
+#: Ui.cpp:561
+msgid "**Hard difficulty**\n"
+msgstr "**Dificultad Dificil**\n"
+
+#: Ui.cpp:574
+msgid  "Press the key you wish to use for:"
+msgstr "Presione la tecla que desea usar para:"
+
+#: Ui.cpp:579
+msgid "move tetromino DOWN (soft-drop)"
+msgstr "mover tetromino ABAJO (suave)"
+
+#: Ui.cpp:580
+msgid "move tetromino LEFT"
+msgstr "mover tetromino IZQUIERDA"
+
+#: Ui.cpp:581
+msgid "move tetromino RIGHT"
+msgstr "mover tetromino DERECHA"
+
+#: Ui.cpp:582
+msgid "rotate tetromino CLOCKWISE"
+msgstr "rotar tetromino AGUJAS DEL RELOJ"
+
+#: Ui.cpp:583
+msgid "rotate tetromino COUNTERCLOCKWISE"
+msgstr "rotar tetromino SENTIDO CONTRARIO AGUJAS DEL RELOJ"
+
+#: Ui.cpp:584
+msgid "DROP tetromino (move down as much as possible immediately)"
+msgstr "SOLTAR tetromino (Bajar Rapido)"
+
+#: Ui.cpp:585
+msgid "PAUSE the game"
+msgstr "PAUSA del Juego"
+
+
+
+
+

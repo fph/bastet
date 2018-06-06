@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-02 18:18-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: main.cpp:47
+msgid "Customize keys"
+msgstr ""
+
+#: main.cpp:47
+msgid "Quit"
+msgstr ""
+
+#: main.cpp:47
+msgid "Play! (harder version)"
+msgstr ""
+
+#: main.cpp:47
+msgid "Play! (normal version)"
+msgstr ""
+
+#: main.cpp:47
+msgid "View highscores"
+msgstr ""
+
+#: Ui.cpp:281
+msgid "    Get ready!\n \n Starting level = %1% \n 0-9 to change\n <SPACE> to start\n"
+msgstr ""
+
+#: Ui.cpp:515
+msgid " Congratulations! You got a high score \n Please enter your name"
+msgstr ""
+
+#: Ui.cpp:312
+msgid " Next block:"
+msgstr ""
+
+#: Ui.cpp:532
+msgid "**Hard difficulty**\n"
+msgstr ""
+
+#: Ui.cpp:530
+msgid "**Normal difficulty**\n"
+msgstr ""
+
+#: Ui.cpp:550
+msgid "DROP tetromino (move down as much as possible immediately)"
+msgstr ""
+
+#: Ui.cpp:320
+msgid "Level:"
+msgstr ""
+
+#: Ui.cpp:318
+msgid "Lines:"
+msgstr ""
+
+#: Ui.cpp:551
+msgid "PAUSE the game"
+msgstr ""
+
+#: Ui.cpp:379
+msgid "Press SPACE or ENTER to resume the game"
+msgstr ""
+
+#: Ui.cpp:543
+msgid "Press the key you wish to use for:\n\n%=1.34s\n\n"
+msgstr ""
+
+#: Ui.cpp:316
+msgid "Score:"
+msgstr ""
+
+#: Ui.cpp:518
+msgid "You did not get into\nthe high score list!\n\n     Try again!\n"
+msgstr ""
+
+#: Ui.cpp:115
+#, c-format
+msgid "bastet: error while initializing graphics (ncurses library).\n"
+msgstr ""
+
+#: Ui.cpp:120
+#, c-format
+msgid "bastet: no color support, sorry. Ask the author for a black and white version."
+msgstr ""
+
+#: Ui.cpp:545
+msgid "move tetromino DOWN (soft-drop)"
+msgstr ""
+
+#: Ui.cpp:546
+msgid "move tetromino LEFT"
+msgstr ""
+
+#: Ui.cpp:547
+msgid "move tetromino RIGHT"
+msgstr ""
+
+#: Ui.cpp:548
+msgid "rotate tetromino CLOCKWISE"
+msgstr ""
+
+#: Ui.cpp:549
+msgid "rotate tetromino COUNTERCLOCKWISE"
+msgstr ""
+
+#: Config.cpp:121
+msgid "No one played yet"
+msgstr ""
+
+#: Config.cpp:121
+msgid "Name of high scorer"
+msgstr ""
+
+#: Config.cpp:122
+msgid "High score (points)"
+msgstr ""

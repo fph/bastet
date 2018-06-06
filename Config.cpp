@@ -118,8 +118,8 @@ namespace Bastet{
     for(int difficulty=0;difficulty<num_difficulties;++difficulty)
       for(size_t i=0;i<HowManyHighScores;i++){
 	highScoresOpts.add_options()
-	  (str(scorer % difficulty % i).c_str(),po::value<string>()->default_value("No one played yet"),"Name of high scorer")
-	  (str(score % difficulty % i).c_str(),po::value<int>()->default_value(0),"High score (points)")
+	  (str(scorer % difficulty % i).c_str(),po::value<string>()->default_value(gettext("No one played yet")),gettext("Name of high scorer"))
+	  (str(score % difficulty % i).c_str(),po::value<int>()->default_value(0),gettext("High score (points)"))
 	  ;
       }
     

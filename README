@@ -20,3 +20,10 @@ The game currently allows choosing between two block choosers. The second (harde
 
 ==Installation==
 See the INSTALL file in this same directory.
+
+==Languages==
+This game was translated into Spanish and Portuguese.
+
+==How to make translation files==
+See the TRANSLATION file in this same directory.
+

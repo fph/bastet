@@ -1,0 +1,52 @@
+==How to make translation files==
+
+To add translations in other language you need to create a new PO file in the language you want (This file must be saved inside po/pt_BR),
+for example to add Portuguese translations from the terminal you must execute the following command: 
+
+  `msginit -l pt_PT -o main.po -i main.pot`
+
+It first ask for the email of the translator and next generates a file for language chose  (here pt_PT)
+```
+ Is the following your email address?
+
+f.poloni_at_gmx.com
+
+ Please confirm by pressing Return, or enter your email address.
+```
+In the header of the new file you can see all the information related to the selected languague and all msgid (Message Identifier) generated from POT file
+
+```
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-02 18:18-0300\n"
+"PO-Revision-Date: 2018-05-30 19:33-0300\n"
+"Last-Translator: Bastet <f.poloni_at_gmx.com>\n"
+"Language-Team: Portuguese\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main.cpp:47
+msgid "Customize keys"
+msgstr ""
+
+#: main.cpp:47
+msgid "Quit"
+msgstr ""
+```
+Now all you have to do is add the translations in each msgstr 
+```
+#: main.cpp:47
+msgid "Customize keys"
+msgstr "Personalizar as chaves"
+
+#: main.cpp:47
+msgid "Quit"
+msgstr "Sair"
+
+Finally, add the language that you translated in the array of languages ​​declared in the translations.sh script.
+
+
+

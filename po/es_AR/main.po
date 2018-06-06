@@ -1,0 +1,165 @@
+# Spanish translations for PACKAGE package.
+# Copyright (C) 2018 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bastet <federico.polonithirtyseven@unipi.it>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.43.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-02 18:18-0300\n"
+"PO-Revision-Date: 2018-05-02 18:19-0300\n"
+"Last-Translator: Bastet <federico.polonithirtyseven@unipi.it>\n"
+"Language-Team: Spanish\n"
+"Language: es_Es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main.cpp:47
+msgid "Customize keys"
+msgstr "Personalizar teclas"
+
+#: main.cpp:47
+msgid "Quit"
+msgstr "Salir"
+
+#: main.cpp:47
+msgid "Play! (harder version)"
+msgstr "¡Juega! (Versión más difícil)"
+
+#: main.cpp:47
+msgid "Play! (normal version)"
+msgstr "¡Juega! (Versión normal)"
+
+#: main.cpp:47
+msgid "View highscores"
+msgstr "Ver puntuaciones altas"
+
+#: Ui.cpp:281
+msgid ""
+"    Get ready!\n"
+" \n"
+" Starting level = %1% \n"
+" 0-9 to change\n"
+" <SPACE> to start\n"
+msgstr ""
+"    Preparate!\n"
+" \n"
+" Nivel inicial = %1% \n"
+" 0-9 to change\n"
+" <ESPACIO> para comenzar\n"
+
+#: Ui.cpp:515
+msgid ""
+" Congratulations! You got a high score \n"
+" Please enter your name"
+msgstr ""
+" Felicitaciones! Has obtenido un puntaje alto \n"
+" Por favor ingrese su nombre"
+
+#: Ui.cpp:312
+msgid " Next block:"
+msgstr " Siguiente:"
+
+#: Ui.cpp:532
+msgid "**Hard difficulty**\n"
+msgstr "**Dificultad difíci**\n"
+
+#: Ui.cpp:530
+msgid "**Normal difficulty**\n"
+msgstr "**Dificultad normal**\n"
+
+#: Ui.cpp:550
+msgid "DROP tetromino (move down as much as possible immediately)"
+msgstr "Soltar figura inmediatamente"
+
+#: Ui.cpp:320
+msgid "Level:"
+msgstr "Nivel:"
+
+#: Ui.cpp:318
+msgid "Lines:"
+msgstr "Líneas:"
+
+#: Ui.cpp:551
+msgid "PAUSE the game"
+msgstr "Pause el juego"
+
+#: Ui.cpp:379
+msgid "Press SPACE or ENTER to resume the game"
+msgstr "Presione ESPACIO o INICIO"
+
+#: Ui.cpp:543
+msgid ""
+"Press the key you wish to use for:\n"
+"\n"
+"%=1.34s\n"
+"\n"
+msgstr ""
+"Presiona la tecla que quieres usar para:\n"
+"\n"
+"%=1.34s\n"
+"\n"
+
+#: Ui.cpp:316
+msgid "Score:"
+msgstr "Puntos:"
+
+#: Ui.cpp:518
+msgid ""
+"You did not get into\n"
+"the high score list!\n"
+"\n"
+"     Try again!\n"
+msgstr ""
+"No ingresaste a la lista de puntajes altos!\n"
+"\n"
+"     Inténtalo nuevamente\n"
+
+#: Ui.cpp:115
+#, c-format
+msgid "bastet: error while initializing graphics (ncurses library).\n"
+msgstr "baster: error al inciar los gráficos (biblioteca ncurses).\n"
+
+#: Ui.cpp:120
+#, c-format
+msgid ""
+"bastet: no color support, sorry. Ask the author for a black and white "
+"version."
+msgstr ""
+"bastet: no hay soporte de color, lo siento. Pídale una versión en blanco y "
+"negro al autor"
+
+#: Ui.cpp:545
+msgid "move tetromino DOWN (soft-drop)"
+msgstr "mover figura ABAJO (caida-suave)"
+
+#: Ui.cpp:546
+msgid "move tetromino LEFT"
+msgstr "mover figura a la IZQUIERDA"
+
+#: Ui.cpp:547
+msgid "move tetromino RIGHT"
+msgstr "mover figura a la DERECHA"
+
+#: Ui.cpp:548
+msgid "rotate tetromino CLOCKWISE"
+msgstr "rotar figura en sentido aL RELOJ"
+
+#: Ui.cpp:549
+msgid "rotate tetromino COUNTERCLOCKWISE"
+msgstr "rotar figura en sentido contrario al RELOJ"
+
+#: Config.cpp:121
+msgid "No one played yet"
+msgstr "Nadie jugó todavía"
+
+#: Config.cpp:121
+msgid "Name of high scorer"
+msgstr "Nombre del máximo anotador"
+
+#: Config.cpp:122
+msgid "High score (points)"
+msgstr "Puntuación alta (puntos)"

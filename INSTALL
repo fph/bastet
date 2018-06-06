@@ -14,3 +14,12 @@ chmod g+s /usr/local/bin/bastet
 touch /var/games/bastet.scores2
 chgrp games /var/games/bastet.scores2
 chmod 664 /var/games/bastet.scores2
+
+
+"translations.sh" is a script that iterates an array with the translated languages ​​and in each iteration generates the .mo binary file and copy this into the folder /usr/share/locale/xx_XX/LC_MESSAGES/, where xx_XX is the language in which It was translated.
+
+To change the language of the game,from the console change the value of LANGUAGE for example:
+
+LANGUAGE=es_AR
+
+

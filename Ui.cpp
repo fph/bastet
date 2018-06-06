@@ -112,12 +112,12 @@ namespace Bastet{
 
   Curses::Curses(){
     if(initscr()==NULL){
-      fprintf(stderr,"bastet: error while initializing graphics (ncurses library).\n");
+      fprintf(stderr,gettext("bastet: error while initializing graphics (ncurses library).\n"));
       exit(1);
     }
     if(!has_colors()){
       endwin();
-      fprintf(stderr,"bastet: no color support, sorry. Ask the author for a black and white version.");
+      fprintf(stderr,gettext("bastet: no color support, sorry. Ask the author for a black and white version."));
       exit(1);
     }
     
@@ -278,11 +278,11 @@ namespace Bastet{
   void Ui::ChooseLevel(){
     RedrawStatic();
     int ch='0';
-    format fmt("    Get ready!\n"
+    format fmt(gettext("    Get ready!\n"
 	       " \n"
 	       " Starting level = %1% \n"
 	       " 0-9 to change\n"
-	       " <SPACE> to start\n");
+	       " <SPACE> to start\n"));
     string msg;
     while(ch!=' '){
       msg=str(fmt % _level);
@@ -309,15 +309,15 @@ namespace Bastet{
     _scoreWin.RedrawBorder();
 
     wattrset((WINDOW*)_nextWin,COLOR_PAIR(17));
-    mvwprintw(_nextWin,0,0," Next block:");
+    mvwprintw(_nextWin,0,0,gettext(" Next block:"));
     wrefresh(_nextWin);
 
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(17));
-    mvwprintw(_scoreWin,1,0,"Score:");
+    mvwprintw(_scoreWin,1,0,gettext("Score:"));
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(18));
-    mvwprintw(_scoreWin,3,0,"Lines:");
+    mvwprintw(_scoreWin,3,0,gettext("Lines:"));
     wattrset((WINDOW*)_scoreWin,COLOR_PAIR(19));
-    mvwprintw(_scoreWin,5,0,"Level:");
+    mvwprintw(_scoreWin,5,0,gettext("Level:"));
     wrefresh(_scoreWin);
   }
 
@@ -376,7 +376,7 @@ namespace Bastet{
 	  break;
 	}
 	else if(ch==keys->Pause){
-	  MessageDialog("Press SPACE or ENTER to resume the game");
+	  MessageDialog(gettext("Press SPACE or ENTER to resume the game"));
 	  RedrawStatic();
 	  RedrawWell(w,b,p);
 	  nodelay(stdscr,TRUE);
@@ -512,14 +512,14 @@ namespace Bastet{
   void Ui::HandleHighScores(difficulty_t diff){
     HighScores *hs=config.GetHighScores(diff);
     if(hs->Qualifies(_points)){
-      string name=InputDialog(" Congratulations! You got a high score \n Please enter your name");
+      string name=InputDialog(gettext(" Congratulations! You got a high score \n Please enter your name"));
       hs->InsertHighScore(_points,name);
     }else{
-      MessageDialog("You did not get into\n"
+      MessageDialog(gettext("You did not get into\n"
 		    "the high score list!\n"
 		    "\n"
 		    "     Try again!\n"
-		    );
+		    ));
     }
   }
 
@@ -527,9 +527,9 @@ namespace Bastet{
     HighScores *hs=config.GetHighScores(diff);
     string allscores;
     if(diff==difficulty_normal)
-      allscores+="**Normal difficulty**\n";
+      allscores+=gettext("**Normal difficulty**\n");
     else if(diff==difficulty_hard)
-      allscores+="**Hard difficulty**\n";
+      allscores+=gettext("**Hard difficulty**\n");
     format fmt("%-20.20s %8d\n");
     for(HighScores::reverse_iterator it=hs->rbegin();it!=hs->rend();++it){
       allscores+=str(fmt % it->Scorer % it->Score);
@@ -540,14 +540,14 @@ namespace Bastet{
   void Ui::CustomizeKeys(){
     Keys *keys=config.GetKeys();
     format fmt(
-      "Press the key you wish to use for:\n\n"
-      "%=1.34s\n\n");
-    keys->Down=KeyDialog(str(fmt % "move tetromino DOWN (soft-drop)"));
-    keys->Left=KeyDialog(str(fmt % "move tetromino LEFT"));
-    keys->Right=KeyDialog(str(fmt % "move tetromino RIGHT"));
-    keys->RotateCW=KeyDialog(str(fmt % "rotate tetromino CLOCKWISE"));
-    keys->RotateCCW=KeyDialog(str(fmt % "rotate tetromino COUNTERCLOCKWISE"));
-    keys->Drop=KeyDialog(str(fmt % "DROP tetromino (move down as much as possible immediately)"));
-    keys->Pause=KeyDialog(str(fmt % "PAUSE the game"));
+      gettext("Press the key you wish to use for:\n\n"
+      "%=1.34s\n\n"));
+    keys->Down=KeyDialog(str(fmt % gettext("move tetromino DOWN (soft-drop)")));
+    keys->Left=KeyDialog(str(fmt % gettext("move tetromino LEFT")));
+    keys->Right=KeyDialog(str(fmt % gettext("move tetromino RIGHT")));
+    keys->RotateCW=KeyDialog(str(fmt % gettext("rotate tetromino CLOCKWISE")));
+    keys->RotateCCW=KeyDialog(str(fmt % gettext("rotate tetromino COUNTERCLOCKWISE")));
+    keys->Drop=KeyDialog(str(fmt % gettext("DROP tetromino (move down as much as possible immediately)")));
+    keys->Pause=KeyDialog(str(fmt % gettext("PAUSE the game")));
   }
 }

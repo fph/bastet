@@ -1,0 +1,105 @@
+# Italian translations for PACKAGE package.
+# Copyright (C) 2018 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Bastet <federico.polonithirtyseven@unipi.it>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.43.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-15 12:28-0300\n"
+"PO-Revision-Date: 2018-05-15 12:28-0300\n"
+"Last-Translator: Bastet <federico.polonithirtyseven@unipi.it>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: main.cpp:47
+msgid "Customize keys"
+msgstr "Per. le chiavi"
+
+#: main.cpp:47
+msgid "Play! (harder version)"
+msgstr "Giocare! (difficile)"
+
+#: main.cpp:47
+msgid "Play! (normal version)"
+msgstr "Giocare! (normale)"
+
+#: main.cpp:47
+msgid "Quit"
+msgstr "Smettere"
+
+#: main.cpp:47
+msgid "View highscores"
+msgstr "i punteggi migliori"
+
+msgid "bastet: error while initializing graphics (ncurses library).\n"
+msgstr "bastet: errore durante l'inizializzazione della grafica (libreria ncurses).\n"
+
+msgid "bastet: no color support, sorry. Ask the author for a black and white version."
+msgstr "bastet: nessun supporto colore, mi dispiace. Chiedi all'autore una versione in bianco e nero."
+
+msgid "    Get ready!\n \n Starting level = %1% \n 0-9 to change\n <SPACE> to start\n"
+msgstr "Preparati!\n\n Livello iniziale =%1%\n 0-9 per cambiare\n <SPACE> per iniziare\n"
+
+
+msgid " Next block:"
+msgstr "Prossimo bloque:"
+
+msgid "Score:"
+msgstr "Punti:"
+
+msgid "Lines:"
+msgstr "Linee:"
+
+msgid "Level:"
+msgstr "Livello:"
+
+msgid "Press SPACE or ENTER to resume the game"
+msgstr "Premere SPAZIO o INVIO per riprendere il gioco"
+
+msgid " Congratulations! You got a high score \n Please enter your name"
+msgstr "Complimenti! Hai ottenuto un punteggio elevato\n Inserisci il tuo nome"
+
+msgid "You did not get into\nthe high score list!\n\n     Try again!\n"
+msgstr "Non sei entrato nella lista dei punteggi piu alti!\n\n Riprova!\n"
+
+msgid "**Normal difficulty**\n"
+msgstr "**Difficolta normale**\n"
+
+msgid "**Hard difficulty**\n"
+msgstr "**Difficile difficolta**\n"
+
+msgid "Press the key you wish to use for:\n\n%=1.34s\n\n"
+msgstr "Premere il tasto che si desidera utilizzare per:\n\n%=1.34s\n\n"
+
+msgid "move tetromino DOWN (soft-drop)"
+msgstr "sposta giu il tetromino (soft-drop)"
+
+msgid "move tetromino LEFT"
+msgstr "sposta il tetromino a SINISTRA"
+
+msgid "move tetromino RIGHT"
+msgstr "sposta il tetromino a DESTRA"
+
+msgid "rotate tetromino CLOCKWISE"
+msgstr "ruotare il tetromino in senso ORARIO"
+
+msgid "rotate tetromino COUNTERCLOCKWISE"
+msgstr "ruotare il tetromino in senso antiorario"
+
+msgid "DROP tetromino (move down as much as possible immediately)"
+msgstr "drop tetromino spostati "
+
+msgid "PAUSE the game"
+msgstr "Metti in pausa il gioco"
+
+msgid "bastet: using a user-specific high scores file: %1%\n as the global high scores file %2% is not writable\n"
+msgstr "bastet: utilizzo di un file con punteggi piu alti specifici per lutente:\n as il file dei punteggi piu alti globale%2% non e scrivibile\n"
+
+msgid "bastet: creating a new user-specific high scores file %1%\n"
+msgstr "bastet: creazione di un nuovo file di punteggi elevati specifico per lutente%1%\n"

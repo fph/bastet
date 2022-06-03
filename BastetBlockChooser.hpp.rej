@@ -1,0 +1,36 @@
+--- BastetBlockChooser.hpp	2014-05-29 13:47:50.000000000 -0500
++++ BastetBlockChooser.hpp	2017-02-22 08:16:54.549988291 -0600
+@@ -75,7 +85,7 @@
+   public:
+     Searcher(BlockType b, const Well *well, Vertex v, WellVisitor *visitor);
+   private:
+-    std::tr1::unordered_set<Vertex> _visited;
++    std::unordered_set<Vertex> _visited;
+     //std::set<Vertex> _visited; ^^ the above is more efficient, we need to do many inserts
+     BlockType _block;
+     const Well *_well;
+--- BastetBlockChooser.hpp~	2022-06-03 10:38:37.473244214 -0500
++++ BastetBlockChooser.hpp	2022-06-03 10:41:11.948938690 -0500
+@@ -23,10 +23,21 @@
+ 
+ #include "Well.hpp"
+ 
+-#include <boost/tr1/tr1/unordered_set>
++#include <unordered_set>
+ #include <set>
+ #include <boost/functional/hash.hpp>
+ 
++//boilerplate to use boost::hash as std::hash
++namespace std{
++    template<> struct hash<Bastet::BlockPosition>{
++      size_t operator()(const Bastet::BlockPosition &fb) const{
++       static boost::hash<Bastet::BlockPosition> h;
++       return h(fb);
++      }
++    };
++  }
++
++
+ namespace Bastet{
+ 
+   static const long GameOverScore=-1000; //bogus score assigned to combinations which cause game over

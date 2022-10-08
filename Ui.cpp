@@ -27,6 +27,7 @@
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
+#include <sys/select.h>
 
 using namespace std;
 using namespace boost;
